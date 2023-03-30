@@ -1,9 +1,17 @@
 <script setup>
 import IndexContent from '@/components/IndexContent.vue';
 import Conversation from '@/components/Conversation.vue';
-
 import ProgressBar from '@/components/ProgressBar.vue';
 import Footer from '@/components/Footer.vue';
+
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import { onMounted, ref } from 'vue';
+gsap.registerPlugin(ScrollTrigger);
+
+const activeSlide = ref(0);
+const offsets = ref([]);
+const slideArr = ref([]);
 const content = [
   "我捐的錢全部都要用在弱勢身上！",
   "可是所有服務都有必要支出，\n如果沒人支持就無法幫助弱勢。",
@@ -14,13 +22,36 @@ const content = [
   "回歸社會？這和我有什麼關係？",
   "多一位好人、少一名壞人，\n你我和社會都受益。"
 ]
+
+function slideAni(e) {
+  if (gsap.isTweening(".slideContent")) return;
+  if (!activeSlide.value && e.deltaY < 0 || activeSlide.value == 8 && e.deltaY > 0) return;
+  activeSlide.value = e.deltaY > 0 ? (activeSlide.value += 1) : (activeSlide.value -= 1);
+  gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 })
+}
+onMounted(() => {
+  slideArr.value = document.querySelectorAll(".slides");
+  for (let i = 0; i < slideArr.value.length; i++) {
+    offsets.value.push(-slideArr.value[i].offsetLeft);
+  }
+  console.log("123", offsets.value);
+});
 </script>
 
 <template>
-  <div class="w-full h-[calc(100vh-45px)] relative">
-    <!-- <IndexContent /> -->
-    <Conversation :content="{ idx: 1, text: content[0] }" />
+  <div class="w-full h-[calc(100vh-45px)] overflow-hidden">
+    <div class="slideContent w-full h-full flex" @wheel="slideAni">
+      <IndexContent class="slides" />
+      <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
+        :content="{ idx: idx + 1, text: item }" />
+    </div>
   </div>
   <ProgressBar />
   <Footer />
 </template>
+
+<style scoped>
+.slides {
+  @apply min-w-full relative;
+}
+</style>
