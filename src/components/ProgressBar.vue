@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
   <span 
     class="fixed bottom-[45px] bg-secondary h-[5px]" 
-    :style="`width:${(nowPage / 12) * 100}%`"
+    :style="`width:${(nowPage / 10) * 100}%`"
   >
   </span>
 </template>
