@@ -32,7 +32,7 @@ const share = (val) => {
         </ul>
       </div>
     </div>
-    <img src="@/assets/icon/scroll.svg">
+    <!-- <img src="@/assets/icon/scroll.svg"> -->
   </div>
 </template>
 

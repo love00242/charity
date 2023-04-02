@@ -6,4 +6,11 @@
   html {
     font-family: 'Noto Sans TC', sans-serif;
   }
+  input {
+    @apply
+    bg-transparent px-2 outline-none;
+  }
+  button {
+    @apply cursor-none w-[93px] py-1 font-normal bg-primary text-secondary text-lg;
+  }
 }
