@@ -43,11 +43,11 @@ function slideAni(e) {
             <img class="shakehand2 absolute max-w-fit h-[120px] -left-[30%] opacity-0" src="@/assets/icon/shakehand2.svg">
         </div>
         <span class="words text-center font-medium text-2xl text-primary opacity-0">
-            民眾和社福就像平行線，<br>
-            沒有交集，<br>
-            如果我們多一點同理，<br>
-            看見彼此的想法與難處，<br>
-            就能互相靠近，<br>
+            民眾和社福就像平行線，<br />
+            沒有交集，<br />
+            如果我們多一點同理，<br />
+            看見彼此的想法與難處，<br />
+            就能互相靠近，<br />
             前往共好包容的未來。
         </span>
     </div>

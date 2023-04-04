@@ -6,11 +6,14 @@
   html {
     font-family: 'Noto Sans TC', sans-serif;
   }
+  small {
+    @apply font-light text-[15px] leading-6;
+  }
   input {
     @apply
     bg-transparent px-2 outline-none;
   }
   button {
-    @apply cursor-none w-[93px] py-1 font-normal bg-primary text-secondary text-lg;
+    @apply cursor-pointer py-1 font-normal bg-transparent rounded-[3px] border border-[#949494] text-[#949494] focus:bg-primary focus:text-secondary;
   }
 }
