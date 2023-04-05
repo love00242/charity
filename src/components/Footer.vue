@@ -9,22 +9,22 @@ const props = defineProps({
     default: false,
   }
 });
+
 const shareTypeList = [
   { type: "fb", svg: fbSvg },
   { type: "line", svg: lineSvg },
 ];
+const url = window.location.href;
 const isOpenShare = ref(false);
 const toggleShare = () => {
   console.log("toggleShare");
   isOpenShare.value = !isOpenShare.value;
 };
-const share = (val) => {
-  console.log("share", val);
-}
 </script>
 
 <template>
-  <div :class="['bg-primary flex items-center justify-between h-[45px] w-full px-3.5 py-1', {'fixed bottom-0': !isInner}]">
+  <div
+    :class="['bg-primary flex items-center justify-between h-[45px] w-full px-3.5 py-1', { 'fixed bottom-0': !isInner }]">
     <div class="flex">
       <img class="mr-3" src="@/assets/icon/home.svg">
       <img v-if="!isOpenShare" src="@/assets/icon/share.svg" class="cursor-pointer" @click="toggleShare">
@@ -32,7 +32,12 @@ const share = (val) => {
         <img src="@/assets/icon/close.svg" class="absolute" @click="toggleShare">
         <ul class="flex items-center border border-secondary rounded-full pl-9 pr-2 py-1">
           <li v-for="(item, i) in shareTypeList" :key="i" class="mx-2">
-            <img :src="item.svg" @click="share(item.type)">
+            <ShareNetwork v-if="item.type === 'fb'" network="facebook" :url="url" :title="''">
+              <img :src="item.svg">
+            </ShareNetwork>
+            <a v-else :href="`https://social-plugins.line.me/lineit/share?url=${url}`" target="_blank">
+              <img :src="item.svg">
+            </a>
           </li>
         </ul>
       </div>
