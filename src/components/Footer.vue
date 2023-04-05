@@ -1,4 +1,5 @@
 <script setup>
+import Scroll from '@/components/Scroll.vue';
 import { ref } from 'vue';
 import fbSvg from '@/assets/icon/fb.svg';
 import lineSvg from '@/assets/icon/line.svg';
@@ -24,7 +25,7 @@ const toggleShare = () => {
 
 <template>
   <div
-    :class="['bg-primary flex items-center justify-between h-[45px] w-full px-3.5 py-1', { 'fixed bottom-0': !isInner }]">
+    :class="['bg-primary flex items-center justify-between h-[45px] w-full pl-3.5 pr-2 py-1', { 'fixed bottom-0': !isInner }]">
     <div class="flex">
       <img class="mr-3" src="@/assets/icon/home.svg">
       <img v-if="!isOpenShare" src="@/assets/icon/share.svg" class="cursor-pointer" @click="toggleShare">
@@ -42,7 +43,7 @@ const toggleShare = () => {
         </ul>
       </div>
     </div>
-    <!-- <img src="@/assets/icon/scroll.svg"> -->
+    <Scroll />
   </div>
 </template>
 
