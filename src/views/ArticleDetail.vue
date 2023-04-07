@@ -183,7 +183,10 @@ const goBack = () => {
             <button class="w-[120px] py-3 mx-auto" @click="sendData">確定</button>
         </section>
         <div class="flex justify-center mb-8">
-            <button class="w-[120px] py-3 text-lg" @click="goBack">回前頁</button>
+            <button class="w-[120px] py-3 text-lg" @click="goBack">
+                <img src="@/assets/icon/back.svg" alt="">
+                回前頁
+            </button>
         </div>
         <ul class="flex flex-col mt-10 mb-8 px-5 text-lg text-[#5C5B5B]">
             <li v-for="(item, i) in otherArticle" :key="'article'+i" class="flex mb-2">

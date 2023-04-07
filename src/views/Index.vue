@@ -58,9 +58,9 @@ onMounted(() => {
   <div class="w-full h-[calc(100vh-45px)] overflow-hidden lg:h-screen relative">
     <div class="slideContent w-full h-full flex" @wheel.stop="setSilde">
       <IndexContent class="slides" />
-      <!-- <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
-            :content="{ idx: idx + 1, text: item }" /> -->
-      <!-- <ShakeHand class="slides" @changePage="changePage" /> -->
+      <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
+        :content="{ idx: idx + 1, text: item }" />
+      <ShakeHand class="slides" @changePage="changePage" />
       <!-- <Article class="slides" /> -->
     </div>
     <Scroll v-if="isPC" />
