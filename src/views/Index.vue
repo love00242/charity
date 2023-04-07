@@ -5,13 +5,15 @@ import ShakeHand from '@/components/ShakeHand.vue';
 import Article from '@/components/Article.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
 import Footer from '@/components/Footer.vue';
+import Scroll from '@/components/Scroll.vue';
 
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const isPC = inject('isPC');
 const activeSlide = ref(0);
 const offsets = ref([]);
 const slideArr = ref([]);
@@ -48,22 +50,25 @@ onMounted(() => {
   for (let i = 0; i < slideArr.value.length; i++) {
     offsets.value.push(-slideArr.value[i].offsetLeft);
   }
-  console.log("123", slideArr.value);
+  console.log("123", slideArr.value, isPC.value);
 });
 </script>
 
 <template>
-  <div class="w-full h-[calc(100vh-45px)] overflow-hidden">
+  <div class="w-full h-[calc(100vh-45px)] overflow-hidden lg:h-screen relative">
     <div class="slideContent w-full h-full flex" @wheel.stop="setSilde">
-      <!-- <IndexContent class="slides" />
-      <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
-        :content="{ idx: idx + 1, text: item }" /> -->
+      <IndexContent class="slides" />
+      <!-- <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
+            :content="{ idx: idx + 1, text: item }" /> -->
       <!-- <ShakeHand class="slides" @changePage="changePage" /> -->
-      <Article class="slides" />
+      <!-- <Article class="slides" /> -->
     </div>
+    <Scroll v-if="isPC" />
   </div>
-  <ProgressBar :nowPage="activeSlide" />
-  <Footer />
+  <template v-if="!isPC">
+    <ProgressBar :nowPage="activeSlide" />
+    <Footer />
+  </template>
 </template>
 
 <style scoped>
