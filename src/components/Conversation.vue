@@ -17,7 +17,7 @@ const isLeft = computed(() => props.content.idx % 2);
         <!-- 手機 -->
         <template v-if="!isPC" >
             <div :class="['w-full h-full absolute z-0 ', isLeft ? 'bg-[#e4e4e4]/20' : 'bg-[#3f3f3f]/40']" />
-            <p :class="['font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line', {'text-white': !isLeft}]">{{ content.text }}</p>
+            <p :class="['font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line md:mb-[10%]', {'text-white': !isLeft}]">{{ content.text }}</p>
             <div class="flex w-[85%] z-[1]">
                 <img :src="isLeft ? leftMan : rightMan">
             </div>

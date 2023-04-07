@@ -1,10 +1,12 @@
 <script setup>
 import gsap from 'gsap';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 const emit = defineEmits(['changePage']);
 
+const isPC = inject('isPC');
 const isFinish = ref(false);
 const tl = gsap.timeline();
+
 function slideAni(e) {
     console.log("123", tl.isActive());
     if (e.deltaY < 0) {
@@ -24,7 +26,7 @@ function slideAni(e) {
     tl.to('.lefthand', { opacity: 0, duration: .1 })
     tl.to('.righthand', { opacity: 0, duration: .1 }, "<")
     tl.to('.shakehand1', { opacity: 1, duration: .1 }, "<")
-    tl.to('.shakehand2', { opacity: 1, duration: .1 },)
+    tl.to('.shakehand2', { opacity: 1, duration: .1 })
     tl.to('.words', {
         opacity: 1, duration: .8, onComplete: () => {
             isFinish.value = true;
@@ -34,20 +36,24 @@ function slideAni(e) {
 </script>
 
 <template>
-    <div class="flex flex-col justify-around bg-[length:100%_100%] bg-[url('@/assets/bg/shakehand.png')] overflow-hidden"
+    <div class="flex flex-col justify-around bg-[length:100%_100%] bg-[url('@/assets/bg/shakehand.png')] overflow-hidden lg:bg-[url('@/assets/bg/shakehand_pc.png')]"
         @wheel="slideAni">
-        <div class="flex relative h-1/2 py-5">
-            <img class="lefthand absolute -left-[55%] min-h-[120px]" src="@/assets/icon/lefthand.svg">
-            <img class="righthand absolute -right-[55%] min-h-[120px]" src="@/assets/icon/righthand.svg">
-            <img class="shakehand1 absolute max-w-fit h-[120px] -left-[30%] opacity-0" src="@/assets/icon/shakehand1.svg">
-            <img class="shakehand2 absolute max-w-fit h-[120px] -left-[30%] opacity-0" src="@/assets/icon/shakehand2.svg">
+        <div class="flex relative h-1/2 py-5 justify-center">
+            <img class="lefthand absolute -left-[55%] h-[139px] md:h-[260px] lg:-left-[40%] lg:h-[342px] xl:-left-[30%] lg:w-1/2"
+                src="@/assets/icon/lefthand.svg">
+            <img class="righthand absolute -right-[55%] h-[139px] md:h-[260px] lg:-right-[50%] lg:h-[342px] xl:-right-[30%] lg:w-1/2"
+                src="@/assets/icon/righthand.svg">
+            <img class="shakehand1 absolute opacity-0 max-w-fit h-[139px] md:h-[260px] 2xl:h-[400px]"
+                src="@/assets/icon/shakehand1.svg">
+            <img class="shakehand2 absolute opacity-0 max-w-fit h-[139px] md:h-[260px] 2xl:h-[400px]"
+                src="@/assets/icon/shakehand2.svg">
         </div>
-        <span class="words text-center font-medium text-2xl text-primary opacity-0">
-            民眾和社福就像平行線，<br />
+        <span class="words text-center font-medium text-2xl text-primary opacity-0 lg:text-5xl lg:leading-snug">
+            民眾和社福就像平行線，<br v-if="!isPC" />
             沒有交集，<br />
-            如果我們多一點同理，<br />
+            如果我們多一點同理，<br v-if="!isPC" />
             看見彼此的想法與難處，<br />
-            就能互相靠近，<br />
+            就能互相靠近，<br v-if="!isPC" />
             前往共好包容的未來。
         </span>
     </div>
