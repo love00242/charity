@@ -1,7 +1,8 @@
 <script setup>
 import Footer from '@/components/Footer.vue';
+import Scroll from '@/components/Scroll.vue';
 import { articleList, articleTitle } from '@/utils/config/articleConfig';
-import { onMounted, ref, nextTick } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 import { useRoute } from "vue-router";
 import router from "@/router";
 
@@ -21,6 +22,7 @@ const ageRangeList = [
     { value: 4, text: "50-60歲" },
     { value: 5, text: "60歲以上" },
 ]
+const isPC = inject('isPC');
 const container = ref(null);
 const route = useRoute();
 const topAns = ref(null);
@@ -62,7 +64,7 @@ const goBack = () => {
     console.log("goBack");
 }
 const goArticle = (num) => {
-    router.replace({path: '/articledetail', query: { article: num }});
+    router.replace({ path: '/articledetail', query: { article: num } });
 }
 onMounted(() => {
     console.log("query", route.query);
@@ -72,105 +74,119 @@ onMounted(() => {
 </script>
 
 <template>
-    <div ref="container" class="overflow-auto">
+    <div ref="container" class="overflow-auto lg:bg-secondary">
         <div
-            :class="['bg-[length:100%_100%] h-[calc(100vh-45px)] text-white flex flex-row-reverse justify-center items-center', `article${articleNum}`]">
-            <h2 class="[writing-mode:vertical-rl] font-bold text-[40px]">{{ articleList[articleNum - 1].title }}<p
-                    class="mr-[5px] normal text-[29px]">{{ articleList[articleNum - 1].subTitle }}</p>
+            :class="['bg-[length:100%_100%] h-[calc(100vh-45px)] text-white flex flex-row-reverse justify-center items-center relative lg:h-screen ]', `article${articleNum}`]">
+            <h2 class="[writing-mode:vertical-rl] font-bold text-[40px] lg:[writing-mode:horizontal-tb] lg:text-6xl">{{
+                articleList[articleNum - 1].title }}<p
+                    class="mr-[5px] font-normal text-[29px] lg:text-6xl lg:text-center lg:mr-0 lg:mt-3 lg:font-bold">{{
+                        articleList[articleNum - 1].subTitle }}</p>
             </h2>
-        </div>
-        <Footer :isInner="true" />
-        <section class="yellowArea">
-            <p class="text-primary mb-5">{{ articleList[articleNum - 1].questionTop }}</p>
-            <ul class="flex text-center mb-1">
-                <li v-for="(item, i) in articleList[articleNum - 1].ansArrTop" :key="'topAns' + i"
-                    :class="['chooseBox mr-2 w-full', { 'active': topAns === i }]" @click="changeState('topAns', i)">
-                    <label :for="i">{{ item }}</label>
-                </li>
-            </ul>
-            <p v-if="topAns" class="text-center text-[15px]">謝謝你的作答</p>
-        </section>
-        <!-- 內文作者 -->
-        <section class="px-5 text-lg">
-            <p class="font-medium">{{ articleList[articleNum - 1].author }}</p><br />
-            <p class="text-justify mb-5 whitespace-pre-line">{{ articleList[articleNum - 1].authorContent }}</p>
-            <template v-if="articleList[articleNum - 1].authorPhoto">
-                <img class="mt-8 mb-2" :src="`/assets/article${articleNum}/author.png`">
-                <small class="flex mb-10">{{ articleList[articleNum - 1].authorPhotoCaption }}</small>
+            <template v-if="isPC">
+                <img class="absolute w-12 left-8 top-8" src="@/assets/icon/home.svg">
+                <Scroll :isGray="true" />
             </template>
-        </section>
-        <!-- 段落 -->
-        <template v-for="(item, i) in articleList[articleNum - 1].sections" :key="'articleSection' + i">
-            <section v-if="item.isQuote" class="mt-10 px-5">
-                <img class="mt-12 mb-8 w-10" src="@/assets/icon/quote.svg">
-                <span class="flex flex-col text-[#949494] text-justify text-[26px] leading-[42px] font-normal mb-12">
-                    {{ item.text }}<br>
-                    <p class="text-lg mt-4">{{ item.author }}</p>
-                </span>
+        </div>
+        <Footer v-if="!isPC" :isInner="true" />
+        <div class="lg:bg-white flex flex-col lg:mx-[120px] lg:px-[15%] lg:pt-10">
+            <section class="yellowArea">
+                <p class="text-primary mb-5 lg:border-b lg:border-b-[#707070] lg:pb-3">{{ articleList[articleNum - 1].questionTop }}</p>
+                <ul class="flex text-center mb-1 lg:justify-center">
+                    <li v-for="(item, i) in articleList[articleNum - 1].ansArrTop" :key="'topAns' + i"
+                        :class="['chooseBox mr-2 w-full lg:w-[150px] lg:h-[60px] lg:leading-[60px]', { 'active': topAns === i }]" @click="changeState('topAns', i)">
+                        <label :for="i">{{ item }}</label>
+                    </li>
+                </ul>
+                <p v-if="topAns!==null" class="text-center text-[15px]">謝謝你的作答</p>
             </section>
-            <template v-else>
-                <section class="mt-10 px-5" v-for="(val, k) in item.content" :key="'content' + k">
-                    <p class="text-[25px] font-bold mb-4 whitespace-pre-line">{{ item.title }}</p>
-                    <p class="text-lg whitespace-pre-line mb-12">{{ val.text }}</p>
-                    <template v-if="val.photoNum.length > 0">
-                        <img v-for="(num, n) in val.photoNum" :key="'contentImg' + n"
-                            :src="`/assets/article${articleNum}/pic${num}.png`" class="mb-2">
-                        <small class="flex mb-10">{{ val.photoCaption }}</small>
-                    </template>
+            <!-- 內文作者 -->
+            <section class="px-5 text-lg lg:text-xl lg:pt-8">
+                <p class="font-medium">{{ articleList[articleNum - 1].author }}</p><br />
+                <p class="text-justify mb-5 whitespace-pre-line">{{ articleList[articleNum - 1].authorContent }}</p>
+                <template v-if="articleList[articleNum - 1].authorPhoto">
+                    <img class="mt-8 mb-2" :src="`/assets/article${articleNum}/author.png`">
+                    <small class="flex mb-10">{{ articleList[articleNum - 1].authorPhotoCaption }}</small>
+                </template>
+            </section>
+            <!-- 段落 -->
+            <template v-for="(item, i) in articleList[articleNum - 1].sections" :key="'articleSection' + i">
+                <section v-if="item.isQuote" class="mt-10 px-5">
+                    <img class="mt-12 mb-8 w-10" src="@/assets/icon/quote.svg">
+                    <span class="flex flex-col text-[#949494] text-justify text-[26px] leading-[42px] font-normal mb-12">
+                        {{ item.text }}<br>
+                        <p class="text-lg mt-4">{{ item.author }}</p>
+                    </span>
                 </section>
+                <template v-else>
+                    <p class="mt-10 px-5 text-[25px] font-bold mb-4 whitespace-pre-line lg:text-center lg:text-4xl lg:mb-7 lg:leading-tight">{{ item.title }}</p>
+                    <section class="px-5" v-for="(val, k) in item.content" :key="'content' + k">
+                        <p class="text-lg whitespace-pre-line mb-12 lg:text-xl">{{ val.text }}</p>
+                        <template v-if="val.photoNum.length > 0">
+                            <img v-for="(num, n) in val.photoNum" :key="'contentImg' + n"
+                                :src="`/assets/article${articleNum}/pic${num}.png`" class="mb-2">
+                            <small class="flex mb-10">{{ val.photoCaption }}</small>
+                        </template>
+                    </section>
+                </template>
             </template>
-        </template>
 
-        <span class="text-lg flex my-12 px-5">關鍵字 〉<p class="font-bold">數位轉型、平行公益、傳善獎</p></span>
+            <span class="text-lg flex my-12 px-5 lg:text-xl">關鍵字 〉<p class="font-bold">數位轉型、平行公益、傳善獎</p></span>
 
-        <section class="yellowArea">
-            <p class="text-primary mb-5 whitespace-pre-line">{{ articleList[articleNum - 1].questionBottom }}</p>
-            <ul class="flex text-center">
-                <li v-for="(ans, m) in articleList[articleNum - 1].ansArrBottom" :key="'ansArrBottom' + m"
-                    :class="['chooseBox mr-1.5 w-[30%] mb-1', { 'active': bottomAns === m }]"
-                    @click="changeState('bottomAns', m)">
-                    <label :for="m">{{ ans }}</label>
+            <section class="yellowArea">
+                <p class="text-primary mb-5 whitespace-pre-line lg:border-b lg:border-b-[#707070] lg:pb-3">{{ articleList[articleNum - 1].questionBottom }}</p>
+                <ul class="flex text-center lg:justify-center lg:pt-5">
+                    <li v-for="(ans, m) in articleList[articleNum - 1].ansArrBottom" :key="'ansArrBottom' + m"
+                        :class="['chooseBox mr-1.5 w-[30%] mb-1 lg:w-[150px] lg:h-[60px] lg:leading-[60px]', { 'active': bottomAns === m }]"
+                        @click="changeState('bottomAns', m)">
+                        <label :for="m">{{ ans }}</label>
+                    </li>
+                </ul>
+                <p v-if="bottomAns!==null" class="text-center text-[15px]">謝謝你的作答</p>
+            </section>
+            <section class="yellowArea flex flex-col">
+                <p class="text-primary mb-5 lg:text-left lg:mb-10">我是....</p>
+                <ul class="flex text-center mb-4">
+                    <li v-for="(item, i) in memberList" :key="'member' + i"
+                        :class="['chooseBox mr-1.5 w-2/5 lg:h-[60px] lg:leading-[60px]', { 'active': member === item.value }]"
+                        @click="changeState('member', item.value)">
+                        <label :for="item.value">{{ item.text }}</label>
+                    </li>
+                </ul>
+                <ul class="flex text-center mb-4">
+                    <li v-for="(item, i) in genderList" :key="'gender' + i"
+                        :class="['chooseBox mr-1.5 w-[15%] lg:h-[60px] lg:leading-[60px]', { 'active': gender === item.value }]"
+                        @click="changeState('gender', item.value)">
+                        <label :for="item.value">{{ item.text }}</label>
+                    </li>
+                </ul>
+                <ul class="flex text-center flex-wrap mb-8">
+                    <li v-for="(item, i) in ageRangeList" :key="'ageRange' + i"
+                        :class="['chooseBox mr-1.5 w-[30%] mb-1 lg:h-[60px] lg:leading-[60px]', { 'active': ageRange === item.value }]"
+                        @click="changeState('ageRange', item.value)">
+                        <label :for="item.value">{{ item.text }}</label>
+                    </li>
+                </ul>
+                <button class="btn w-[120px] py-3 mx-auto lg:w-[240px]" @click="sendData">確定</button>
+            </section>
+            <div class="flex justify-center mb-8 lg:flex-col lg:items-center lg:mt-8">
+                <button class="btn w-[120px] py-3 text-lg flex items-center justify-center lg:w-[240px] lg:mb-4" @click="goBack">
+                    回前頁
+                    <img src="@/assets/icon/back.svg" class="w-4 ml-1">
+                </button>
+                <button v-if="isPC" class="btn w-[120px] py-3 text-lg flex items-center justify-center lg:w-[240px]" @click="goBack">
+                    分享
+                    <img src="@/assets/icon/share_pc.svg" class="w-4 ml-1">
+                </button>
+            </div>
+            <ul class="flex flex-col mt-10 mb-8 px-5 text-lg text-[#5C5B5B] lg:flex-row lg:items-baseline">
+                <li v-for="(item, i) in otherArticle.slice(0, 3)" :key="'article' + i" class="flex mb-2 lg:flex-col-reverse lg:mx-2 lg:w-1/3"
+                    @click="goArticle(item.num)">
+                    <p class="w-[40%] lg:w-full">{{ item.title }}</p>
+                    <img :src="`assets/article${item.num}/bg_pc.png`" class="w-[60%] min-h-[135px] lg:min-h-[188px] lg:w-full object-cover">
                 </li>
             </ul>
-            <p v-if="bottomAns" class="text-center text-[15px]">謝謝你的作答</p>
-        </section>
-        <section class="yellowArea flex flex-col">
-            <p class="text-primary mb-5">我是....</p>
-            <ul class="flex text-center mb-4">
-                <li v-for="(item, i) in memberList" :key="'member' + i"
-                    :class="['chooseBox mr-1.5 w-2/5', { 'active': member === item.value }]"
-                    @click="changeState('member', item.value)">
-                    <label :for="item.value">{{ item.text }}</label>
-                </li>
-            </ul>
-            <ul class="flex text-center mb-4">
-                <li v-for="(item, i) in genderList" :key="'gender' + i"
-                    :class="['chooseBox mr-1.5 w-[15%]', { 'active': gender === item.value }]"
-                    @click="changeState('gender', item.value)">
-                    <label :for="item.value">{{ item.text }}</label>
-                </li>
-            </ul>
-            <ul class="flex text-center flex-wrap mb-8">
-                <li v-for="(item, i) in ageRangeList" :key="'ageRange' + i"
-                    :class="['chooseBox mr-1.5 w-[30%] mb-1', { 'active': ageRange === item.value }]"
-                    @click="changeState('ageRange', item.value)">
-                    <label :for="item.value">{{ item.text }}</label>
-                </li>
-            </ul>
-            <button class="btn w-[120px] py-3 mx-auto" @click="sendData">確定</button>
-        </section>
-        <div class="flex justify-center mb-8">
-            <button class="btn w-[120px] py-3 text-lg flex items-center justify-center" @click="goBack">
-                回前頁
-                <img src="@/assets/icon/back.svg" class="w-4 ml-1">
-            </button>
+
         </div>
-        <ul class="flex flex-col mt-10 mb-8 px-5 text-lg text-[#5C5B5B]">
-            <li v-for="(item, i) in otherArticle.slice(0, 3)" :key="'article' + i" class="flex mb-2" @click="goArticle(item.num)">
-                <p class="w-[40%]">{{ item.title }}</p>
-                <img :src="`assets/article${item.num}/bg_pc.png`" class="w-[60%] min-h-[135px]">
-            </li>
-        </ul>
     </div>
 </template>
 
@@ -196,14 +212,13 @@ onMounted(() => {
 }
 
 .yellowArea {
-    @apply bg-secondary rounded-lg mx-5 my-10 px-5 py-6 text-lg;
+    @apply bg-secondary rounded-lg mx-5 my-10 px-5 py-6 text-lg lg:w-[95%] lg:px-8 lg:text-center lg:text-2xl lg:mx-auto lg:my-3;
 }
 
 .chooseBox {
-    @apply bg-white text-[#949494] rounded-[3px] py-2;
+    @apply bg-white text-[#949494] rounded-[3px] py-2 lg:py-0;
 }
 
 .active {
     @apply bg-primary text-secondary;
-}
-</style>
+}</style>
