@@ -1,19 +1,8 @@
 <script setup>
-import gearIcon from '@/assets/icon/article1.svg';
-import moneyIcon from '@/assets/icon/article2.svg';
-import phoneIcon from '@/assets/icon/article3.svg';
-import heartIcon from '@/assets/icon/article4.svg';
-import plantIcon from '@/assets/icon/article5.svg';
+import { articleTitle } from '@/utils/config/articleConfig';
 import router from "@/router";
 import { ref, inject } from 'vue';
 
-const slideArr = [
-    { num: 1, title: "「搞創新，9成都失敗」台灣社福輸在哪？", icon: gearIcon },
-    { num: 2, title: "錢不到位、心又委屈，他們只靠「積福報」苦撐。", icon: moneyIcon },
-    { num: 3, title: "擁抱數位轉型浪潮，社福卻差點滅頂，為什麼？", icon: phoneIcon },
-    { num: 4, title: "社福進社區做好事，為什麼卻被下跪抗議？", icon: heartIcon },
-    { num: 5, title: "善與惡的拔河，你希望誰獲勝。", icon: plantIcon },
-]
 const isPC = inject('isPC');
 const container = ref(null);
 const startX = ref(0);
@@ -21,10 +10,10 @@ const scrollLeft = ref(0);
 const isDrag = ref(false);
 const mail = ref("");
 
-const goDetail = () => {
+const goDetail = (idx) => {
     if (isDrag.value) return;
     console.log("goDetail");
-    router.push("/articledetail");
+    router.push({ path: '/articledetail', query: { article: idx + 1 } });
 }
 const mousedown = (e) => {
     isDrag.value = true;
@@ -45,11 +34,11 @@ const scroll = (type) => {
 }
 const sendMail = () => {
     const mailRegex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    if(mail.value === "") {
+    if (mail.value === "") {
         alert("請輸入電子信箱");
         return;
     }
-    if(!mailRegex.test(mail.value)) {
+    if (!mailRegex.test(mail.value)) {
         alert("請輸入正確Email格式");
         return;
     }
@@ -67,7 +56,7 @@ const sendMail = () => {
                 <button v-if="isPC" class="text-3xl cursor-pointer" @click="scroll('left')">{{ "<" }}</button>
                         <ul ref="container" class="container flex overflow-auto p-5 pb-6 mx-2" @mousedown="mousedown"
                             @mousemove.prevent="mousemove" @mouseup="mouseup">
-                            <li v-for="slide in slideArr" :key="slide" @click="goDetail"
+                            <li v-for="slide, idx in articleTitle" :key="`slide${idx}`" @click="goDetail(idx)"
                                 class="border-[0.5px] border-secondary rounded-[5px] bg-[#fff] flex flex-col items-center justify-around min-h-[270px] mx-2 px-5 min-w-[250px] w-[250px]">
                                 <img :src="slide.icon">
                                 <h2 class="text-2xl text-left">{{ slide.title }}</h2>
