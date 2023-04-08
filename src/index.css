@@ -14,6 +14,12 @@
     bg-transparent px-2 outline-none;
   }
   button {
-    @apply cursor-pointer py-1 font-normal bg-transparent rounded-[3px] border border-[#949494] text-[#949494] focus:bg-primary focus:text-secondary;
+    @apply cursor-pointer py-1 font-normal bg-transparent rounded-[3px];
+  }
+}
+
+@layer components {
+  .btn {
+    @apply border border-[#949494] text-[#949494] hover:bg-primary hover:text-secondary
   }
 }

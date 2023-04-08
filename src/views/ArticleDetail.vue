@@ -180,10 +180,10 @@ const goBack = () => {
                     <label :for="item.value">{{ item.text }}</label>
                 </li>
             </ul>
-            <button class="w-[120px] py-3 mx-auto" @click="sendData">確定</button>
+            <button class="btn w-[120px] py-3 mx-auto" @click="sendData">確定</button>
         </section>
         <div class="flex justify-center mb-8">
-            <button class="w-[120px] py-3 text-lg" @click="goBack">
+            <button class="btn w-[120px] py-3 text-lg" @click="goBack">
                 <img src="@/assets/icon/back.svg" alt="">
                 回前頁
             </button>

@@ -59,11 +59,11 @@ onMounted(() => {
     <div class="slideContent w-full h-full flex" @wheel.stop="setSilde">
       <IndexContent class="slides" />
       <!-- <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
-        :content="{ idx: idx + 1, text: item }" /> -->
+          :content="{ idx: idx + 1, text: item }" /> -->
       <!-- <ShakeHand class="slides" @changePage="changePage" /> -->
       <Article class="slides" />
     </div>
-    <Scroll v-if="isPC && activeSlide<9" />
+    <Scroll v-if="isPC && activeSlide < 9" />
   </div>
   <template v-if="!isPC">
     <ProgressBar :nowPage="activeSlide" />
