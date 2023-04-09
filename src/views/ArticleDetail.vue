@@ -90,6 +90,16 @@ const goHome = () => {
     sessionStorage.setItem("slideNum", 0);
     router.push({ name: 'Idx' });
 }
+const getImageUrl = (type, num) => {
+    switch (type) {
+        case "author":
+            return new URL(`../assets/article${articleNum.value}/author.png`, import.meta.url).href;
+        case "pic":
+            return  new URL(`../assets/article${articleNum.value}/pic${num}.png`, import.meta.url).href;
+        case "bg":
+            return  new URL(`../assets/article${num}/bg_pc.png`, import.meta.url).href;
+    }
+}
 
 onMounted(() => {
     console.log("query", route.query);
@@ -135,7 +145,7 @@ onBeforeUnmount(() => {
                 <p class="font-medium">{{ articleList[articleNum - 1].author }}</p><br />
                 <p class="text-justify mb-5 whitespace-pre-line">{{ articleList[articleNum - 1].authorContent }}</p>
                 <template v-if="articleList[articleNum - 1].authorPhoto">
-                    <img class="mt-8 mb-2 lg:w-full" :src="`/assets/article${articleNum}/author.png`">
+                    <img class="mt-8 mb-2 lg:w-full" :src="getImageUrl('author')">
                     <small class="flex mb-10">{{ articleList[articleNum - 1].authorPhotoCaption }}</small>
                 </template>
             </section>
@@ -156,7 +166,7 @@ onBeforeUnmount(() => {
                         <p class="text-lg whitespace-pre-line mb-12 lg:text-xl">{{ val.text }}</p>
                         <template v-if="val.photoNum.length > 0">
                             <img v-for="(num, n) in val.photoNum" :key="'contentImg' + n"
-                                :src="`/assets/article${articleNum}/pic${num}.png`" class="mb-2 lg:w-full">
+                                :src="getImageUrl('pic', num)" class="mb-2 lg:w-full">
                             <small class="flex mb-10">{{ val.photoCaption }}</small>
                         </template>
                     </section>
@@ -214,7 +224,7 @@ onBeforeUnmount(() => {
                 <li v-for="(item, i) in otherArticle.slice(0, 3)" :key="'article' + i"
                     class="flex mb-2 lg:flex-col-reverse lg:mx-2 lg:w-1/3" @click="goArticle(item.num)">
                     <p class="w-[40%] lg:w-full">{{ item.title }}</p>
-                    <img :src="`assets/article${item.num}/bg_pc.png`"
+                    <img :src="getImageUrl('bg', item.num)"
                         class="w-[60%] min-h-[135px] lg:min-h-[188px] lg:w-full object-cover">
                 </li>
             </ul>
