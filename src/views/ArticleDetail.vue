@@ -1,4 +1,5 @@
 <script setup>
+import axios from 'axios';
 import Footer from '@/components/Footer.vue';
 import Scroll from '@/components/Scroll.vue';
 import scrollTop from '@/components/scrollTop.vue';
@@ -25,7 +26,7 @@ const ageRangeList = [
     { value: 5, text: "60歲以上" },
 ]
 const isPC = inject('isPC');
-const topDistance  = ref(0);
+const topDistance = ref(0);
 const route = useRoute();
 const topAns = ref(null);
 const bottomAns = ref(null);
@@ -55,12 +56,23 @@ const changeState = (type, val) => {
     }
     console.log("changeState", val);
 }
-const sendData = () => {
+async function sendData() {
     console.log("sendData");
     if (topAns.value === null || bottomAns.value === null || member === "" || gender === "" || ageRange === null) {
         alert("還有題目尚未作答");
         return
     }
+    const api = `php/insertDataArticle.php`;
+    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+    const data = new FormData();
+    data.append(`topAns${articleNum.value}`, topAns.value)
+    data.append(`bottomAns${articleNum.value}`, bottomAns.value)
+    data.append("member", member.value)
+    data.append("gender", gender.value)
+    data.append("ageRange", ageRange.value)
+
+    const result = await axios.post(api, data, config);
+    console.log(result.status);
 }
 const goBack = () => {
     console.log("goBack");
@@ -80,7 +92,7 @@ onMounted(() => {
     otherArticle.value = articleTitle.filter(item => item.num !== Number(articleNum.value));
     window.addEventListener('scroll', handleScroll);
 });
-onBeforeUnmount(()=>{
+onBeforeUnmount(() => {
     window.addEventListener('scroll', handleScroll);
 })
 </script>
@@ -102,14 +114,16 @@ onBeforeUnmount(()=>{
         <Footer v-if="!isPC" :isInner="true" />
         <div class="lg:bg-white flex flex-col lg:mx-[120px] lg:px-[15%] lg:pt-10">
             <section class="yellowArea">
-                <p class="text-primary mb-5 lg:border-b lg:border-b-[#707070] lg:pb-3">{{ articleList[articleNum - 1].questionTop }}</p>
+                <p class="text-primary mb-5 lg:border-b lg:border-b-[#707070] lg:pb-3">{{ articleList[articleNum -
+                    1].questionTop }}</p>
                 <ul class="flex text-center mb-1 lg:justify-center">
                     <li v-for="(item, i) in articleList[articleNum - 1].ansArrTop" :key="'topAns' + i"
-                        :class="['chooseBox mr-2 w-full lg:w-[150px] lg:h-[60px] lg:leading-[60px]', { 'active': topAns === i }]" @click="changeState('topAns', i)">
+                        :class="['chooseBox mr-2 w-full lg:w-[150px] lg:h-[60px] lg:leading-[60px]', { 'active': topAns === i }]"
+                        @click="changeState('topAns', i)">
                         <label :for="i">{{ item }}</label>
                     </li>
                 </ul>
-                <p v-if="topAns!==null" class="text-center text-[15px]">謝謝你的作答</p>
+                <p v-if="topAns !== null" class="text-center text-[15px]">謝謝你的作答</p>
             </section>
             <!-- 內文作者 -->
             <section class="px-5 text-lg lg:text-xl lg:pt-8">
@@ -130,7 +144,9 @@ onBeforeUnmount(()=>{
                     </span>
                 </section>
                 <template v-else>
-                    <p class="mt-10 px-5 text-[25px] font-bold mb-4 whitespace-pre-line lg:text-center lg:text-4xl lg:mb-7 lg:leading-tight">{{ item.title }}</p>
+                    <p
+                        class="mt-10 px-5 text-[25px] font-bold mb-4 whitespace-pre-line lg:text-center lg:text-4xl lg:mb-7 lg:leading-tight">
+                        {{ item.title }}</p>
                     <section class="px-5" v-for="(val, k) in item.content" :key="'content' + k">
                         <p class="text-lg whitespace-pre-line mb-12 lg:text-xl">{{ val.text }}</p>
                         <template v-if="val.photoNum.length > 0">
@@ -145,7 +161,8 @@ onBeforeUnmount(()=>{
             <span class="text-lg flex my-12 px-5 lg:text-xl">關鍵字 〉<p class="font-bold">數位轉型、平行公益、傳善獎</p></span>
 
             <section class="yellowArea">
-                <p class="text-primary mb-5 whitespace-pre-line lg:border-b lg:border-b-[#707070] lg:pb-3">{{ articleList[articleNum - 1].questionBottom }}</p>
+                <p class="text-primary mb-5 whitespace-pre-line lg:border-b lg:border-b-[#707070] lg:pb-3">{{
+                    articleList[articleNum - 1].questionBottom }}</p>
                 <ul class="flex text-center lg:justify-center lg:pt-5">
                     <li v-for="(ans, m) in articleList[articleNum - 1].ansArrBottom" :key="'ansArrBottom' + m"
                         :class="['chooseBox mr-1.5 w-[30%] mb-1 lg:w-[150px] lg:h-[60px] lg:leading-[60px]', { 'active': bottomAns === m }]"
@@ -153,7 +170,7 @@ onBeforeUnmount(()=>{
                         <label :for="m">{{ ans }}</label>
                     </li>
                 </ul>
-                <p v-if="bottomAns!==null" class="text-center text-[15px]">謝謝你的作答</p>
+                <p v-if="bottomAns !== null" class="text-center text-[15px]">謝謝你的作答</p>
             </section>
             <section class="yellowArea flex flex-col">
                 <p class="text-primary mb-5 lg:text-left lg:mb-10">我是....</p>
@@ -181,17 +198,19 @@ onBeforeUnmount(()=>{
                 <button class="btn w-[120px] py-3 mx-auto lg:w-[240px]" @click="sendData">確定</button>
             </section>
             <div class="flex justify-center mb-8 lg:flex-col lg:items-center lg:mt-8">
-                <button class="btn w-[120px] py-3 text-lg flex items-center justify-center lg:w-[240px] lg:mb-4" @click="goBack">
+                <button class="btn w-[120px] py-3 text-lg flex items-center justify-center lg:w-[240px] lg:mb-4"
+                    @click="goBack">
                     回前頁
                     <img src="@/assets/icon/back.svg" class="w-4 ml-1">
                 </button>
                 <ShareSocialMedia v-if="isPC" :isArticleDetail="true"></ShareSocialMedia>
             </div>
             <ul class="flex flex-col mt-10 mb-8 px-5 text-lg text-[#5C5B5B] lg:flex-row lg:items-baseline">
-                <li v-for="(item, i) in otherArticle.slice(0, 3)" :key="'article' + i" class="flex mb-2 lg:flex-col-reverse lg:mx-2 lg:w-1/3"
-                    @click="goArticle(item.num)">
+                <li v-for="(item, i) in otherArticle.slice(0, 3)" :key="'article' + i"
+                    class="flex mb-2 lg:flex-col-reverse lg:mx-2 lg:w-1/3" @click="goArticle(item.num)">
                     <p class="w-[40%] lg:w-full">{{ item.title }}</p>
-                    <img :src="`assets/article${item.num}/bg_pc.png`" class="w-[60%] min-h-[135px] lg:min-h-[188px] lg:w-full object-cover">
+                    <img :src="`assets/article${item.num}/bg_pc.png`"
+                        class="w-[60%] min-h-[135px] lg:min-h-[188px] lg:w-full object-cover">
                 </li>
             </ul>
         </div>
@@ -233,14 +252,20 @@ onBeforeUnmount(()=>{
 }
 
 /* 分享 */
-:deep(.share){
+:deep(.share) {
     @apply lg:flex;
+
     ul {
-        @apply lg:w-[160px] lg:h-[54px] lg:px-6;
+        @apply lg:w-[160px] lg:h-[54px] lg:pl-10;
     }
-    > img {
-        @apply lg:w-14 lg:relative;
+
+    > div {
+        @apply lg:w-[60px] lg:h-[60px] lg:relative lg:left-5;
+        img {
+            @apply w-6;
+        }
     }
+
     li {
         @apply lg:mr-6;
         img {
