@@ -10,7 +10,6 @@ const startPos = ref({ x: 0, y: 0 });
 const endPos = ref({ x: 0, y: 0 });
 
 function slideAni(e, type) {
-    console.log("123", e, type);
     if (e?.deltaY < 0 || type === "prev") {
         !isFinish.value && emit("changePage", "prev");
         isFinish.value = false;
@@ -40,13 +39,11 @@ function shakehandAni() {
     })
 }
 function touchstart(e) {
-    console.log("touchstart");
     e.preventDefault();
     startPos.x = e.changedTouches[0].pageX;
     startPos.y = e.changedTouches[0].pageY;
 }
 function touchmove(e) {
-    console.log("touchmove");
     e.preventDefault();
     endPos.x = e.changedTouches[0].pageX;
     endPos.y = e.changedTouches[0].pageY;

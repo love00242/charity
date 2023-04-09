@@ -75,7 +75,7 @@ async function sendData() {
     console.log(result.status);
 }
 const goBack = () => {
-    console.log("goBack");
+    router.push({ name: 'Idx' });
 }
 const goArticle = (num) => {
     router.replace({ path: '/articledetail', query: { article: num } });
@@ -86,6 +86,11 @@ const handleScroll = () => {
 const goTop = () => {
     window.scrollTo(0, 0);
 }
+const goHome = () => {
+    sessionStorage.setItem("slideNum", 0);
+    router.push({ name: 'Idx' });
+}
+
 onMounted(() => {
     console.log("query", route.query);
     articleNum.value = route.query.article;
@@ -107,7 +112,7 @@ onBeforeUnmount(() => {
                         articleList[articleNum - 1].subTitle }}</p>
             </h2>
             <template v-if="isPC">
-                <img class="absolute w-12 left-8 top-8" src="@/assets/icon/home.svg">
+                <img class="absolute w-12 left-8 top-8 cursor-pointer" src="@/assets/icon/home.svg" @click="goHome">
                 <Scroll :isGray="true" />
             </template>
         </div>

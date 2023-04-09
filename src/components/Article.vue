@@ -5,6 +5,8 @@ import ShareSocialMedia from '@/components/ShareSocialMedia.vue';
 import router from "@/router";
 import { ref, inject } from 'vue';
 
+const emit = defineEmits(["changeSlide"])
+
 const isPC = inject('isPC');
 const container = ref(null);
 const startX = ref(0);
@@ -33,6 +35,11 @@ const mouseup = () => {
 }
 const scroll = (type) => {
     type === "right" ? container.value.scrollLeft += 60 : container.value.scrollLeft -= 60;
+}
+const goHome = () => {
+    sessionStorage.setItem("slideNum", 0);
+    router.push({ name: 'Idx' });
+    emit("changeSlide");
 }
 async function sendMail() {
     const mailRegex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -67,7 +74,7 @@ async function sendMail() {
                 <ul ref="container" class="container flex overflow-auto p-5 pb-6 mx-2 " @mousedown="mousedown"
                     @mousemove.prevent="mousemove" @mouseup="mouseup">
                     <li v-for="slide, idx in articleTitle" :key="`slide${idx}`" @click="goDetail(idx)"
-                        class="border-[0.5px] border-secondary rounded-[5px] bg-[#fff] flex flex-col items-center justify-around min-h-[270px] mx-2 px-5 min-w-[250px] w-[250px]">
+                        class="border-[0.5px] border-secondary rounded-[5px] cursor-pointer bg-[#fff] flex flex-col items-center justify-around min-h-[270px] mx-2 px-5 min-w-[250px] w-[250px]">
                         <img :src="slide.icon">
                         <h2 class="text-2xl text-left">{{ slide.title }}</h2>
                         <div class="flex mr-auto">
@@ -91,7 +98,7 @@ async function sendMail() {
             </div>
             <button class="btn ml-9 mt-2 mb-3 w-[93px] text-lg lg:block lg:m-auto" @click="sendMail">送出</button>
             <div v-if="isPC" class="flex justify-center my-4 items-center">
-                <img src="@/assets/icon/home_pc.svg" class="mr-2.5 w-[37px] cursor-pointer">
+                <img src="@/assets/icon/home_pc.svg" class="mr-2.5 w-[37px] cursor-pointer" @click="goHome">
                 <ShareSocialMedia />
             </div>
         </div>
