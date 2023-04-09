@@ -22,4 +22,5 @@
   .btn {
     @apply border border-[#949494] text-[#949494] hover:bg-primary hover:text-secondary
   }
+
 }

@@ -2,6 +2,7 @@
 import Footer from '@/components/Footer.vue';
 import Scroll from '@/components/Scroll.vue';
 import scrollTop from '@/components/scrollTop.vue';
+import ShareSocialMedia from '@/components/ShareSocialMedia.vue';
 import { articleList, articleTitle } from '@/utils/config/articleConfig';
 import { onMounted, ref, inject, onBeforeUnmount } from 'vue';
 import { useRoute } from "vue-router";
@@ -184,10 +185,7 @@ onBeforeUnmount(()=>{
                     回前頁
                     <img src="@/assets/icon/back.svg" class="w-4 ml-1">
                 </button>
-                <button v-if="isPC" class="btn w-[120px] py-3 text-lg flex items-center justify-center lg:w-[240px]" @click="goBack">
-                    分享
-                    <img src="@/assets/icon/share_pc.svg" class="w-4 ml-1">
-                </button>
+                <ShareSocialMedia v-if="isPC" :isArticleDetail="true"></ShareSocialMedia>
             </div>
             <ul class="flex flex-col mt-10 mb-8 px-5 text-lg text-[#5C5B5B] lg:flex-row lg:items-baseline">
                 <li v-for="(item, i) in otherArticle.slice(0, 3)" :key="'article' + i" class="flex mb-2 lg:flex-col-reverse lg:mx-2 lg:w-1/3"
@@ -232,4 +230,25 @@ onBeforeUnmount(()=>{
 
 .active {
     @apply bg-primary text-secondary;
-}</style>
+}
+
+/* 分享 */
+:deep(.share){
+    @apply lg:flex;
+    ul {
+        @apply lg:w-[160px] lg:h-[54px] lg:px-6;
+    }
+    > img {
+        @apply lg:w-14 lg:relative;
+    }
+    li {
+        @apply lg:mr-6;
+        img {
+            @apply lg:h-8;
+        }
+        .line {
+            @apply lg:h-7;
+        }
+    }
+}
+</style>

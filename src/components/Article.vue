@@ -1,5 +1,6 @@
 <script setup>
 import { articleTitle } from '@/utils/config/articleConfig';
+import ShareSocialMedia from '@/components/ShareSocialMedia.vue';
 import router from "@/router";
 import { ref, inject } from 'vue';
 
@@ -79,6 +80,10 @@ const sendMail = () => {
                 <p class="text-primary text-xl mt-1.5 pl-9 lg:mt-0 lg:pl-0 lg:text-xl">我願意收到新文章的上線提醒</p>
             </div>
             <button class="btn ml-9 mt-2 mb-3 w-[93px] text-lg lg:block lg:m-auto" @click="sendMail">送出</button>
+            <div v-if="isPC" class="flex justify-center my-4 items-center">
+                <img src="@/assets/icon/home_pc.svg" class="mr-2.5 w-[37px]">
+                <ShareSocialMedia />
+            </div>
         </div>
     </div>
 </template>
