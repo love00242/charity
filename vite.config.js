@@ -13,5 +13,18 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
       '/assets': 'src/assets',
     }
+  },
+  build: {
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        index: resolve(__dirname, 'index.html'),
+      },
+      output: {
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/name-[hash].[ext]'
+      }
+    }
   }
 })
