@@ -59,12 +59,12 @@ async function sendMail() {
         class="relative bg-[length:100%_100%] flex flex-col bg-[url('@/assets/bg/shakehand.png')] overflow-hidden items-center">
         <img class="absolute h-[139px] max-w-fit md:h-[260px] 2xl:h-[400px] top-[5%]" src="@/assets/icon/shakehand2.svg">
         <div class="w-full h-full absolute bg-[#fff]/20 backdrop-blur left-0 right-0" />
-        <div class="w-[90%] m-auto z-[1] pt-[35%] md:pt-[25%] lg:pt-0">
+        <div class="w-[90%] m-auto z-[1] pt-[35%] md:pt-[25%] lg:pt-0 lg:mx-auto 2xl:w-[unset]">
             <div class="flex items-center">
                 <button v-if="isPC" class="text-3xl cursor-pointer" @click="scroll('left')">
                     <img src="@/assets/icon/arrow_left.svg">
                 </button>
-                <ul ref="container" class="container flex overflow-auto p-5 pb-6 mx-2" @mousedown="mousedown"
+                <ul ref="container" class="container flex overflow-auto p-5 pb-6 mx-2 " @mousedown="mousedown"
                     @mousemove.prevent="mousemove" @mouseup="mouseup">
                     <li v-for="slide, idx in articleTitle" :key="`slide${idx}`" @click="goDetail(idx)"
                         class="border-[0.5px] border-secondary rounded-[5px] bg-[#fff] flex flex-col items-center justify-around min-h-[270px] mx-2 px-5 min-w-[250px] w-[250px]">

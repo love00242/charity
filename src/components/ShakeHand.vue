@@ -6,20 +6,26 @@ const emit = defineEmits(['changePage']);
 const isPC = inject('isPC');
 const isFinish = ref(false);
 const tl = gsap.timeline();
+const startPos = ref({ x: 0, y: 0 });
+const endPos = ref({ x: 0, y: 0 });
 
-function slideAni(e) {
-    console.log("123", tl.isActive());
-    if (e.deltaY < 0) {
+function slideAni(e, type) {
+    console.log("123", e, type);
+    if (e?.deltaY < 0 || type === "prev") {
         !isFinish.value && emit("changePage", "prev");
         isFinish.value = false;
         tl.reverse(-1);
         return
-    } else if (e.deltaY > 0 && isFinish.value) {
+    } else if ((e?.deltaY > 0 || type === "next") && isFinish.value) {
         console.log("emit 下一頁");
         isFinish.value = false;
         emit("changePage", "next")
         return
     }
+    shakehandAni();
+}
+
+function shakehandAni() {
     tl.play();
     tl.to('.lefthand', { x: 45, duration: .6 })
     tl.to('.righthand', { x: -45, duration: .6 }, "<")
@@ -33,11 +39,36 @@ function slideAni(e) {
         }
     })
 }
+function touchstart(e) {
+    console.log("touchstart");
+    e.preventDefault();
+    startPos.x = e.changedTouches[0].pageX;
+    startPos.y = e.changedTouches[0].pageY;
+}
+function touchmove(e) {
+    console.log("touchmove");
+    e.preventDefault();
+    endPos.x = e.changedTouches[0].pageX;
+    endPos.y = e.changedTouches[0].pageY;
+}
+function touchend() {
+    const x = endPos.x - startPos.x;
+    const y = endPos.y - startPos.y;
+    if (Math.abs(y) > Math.abs(x)) {
+        if (y > 0) {
+            console.log("下滑", y);
+            slideAni(null, "next")
+        } else if (y < 0) {
+            console.log("上滑 hand", y);
+            slideAni(null, "prev");
+        }
+    }
+}
 </script>
 
 <template>
-    <div class="flex flex-col justify-around bg-[length:100%_100%] bg-[url('@/assets/bg/shakehand.png')] overflow-hidden lg:bg-[url('@/assets/bg/shakehand_pc.png')]"
-        @wheel="slideAni">
+    <div class="flex flex-col justify-around bg-[length:100%_100%] bg-[url('@/assets/bg/shakehand.png')] overflow-hidden lg:bg-[url('@/assets/bg/shakehand_pc.png')] w-full"
+        @wheel.stop="slideAni" @touchstart="touchstart" @touchmove="touchmove" @touchend.stop="touchend">
         <div class="flex relative h-1/2 py-5 justify-center">
             <img class="lefthand absolute -left-[55%] h-[139px] md:h-[260px] lg:-left-[40%] lg:h-[342px] xl:-left-[30%] lg:w-1/2"
                 src="@/assets/icon/lefthand.svg">

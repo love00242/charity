@@ -9,7 +9,7 @@ import Scroll from '@/components/Scroll.vue';
 
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { onMounted, ref, inject } from 'vue';
+import { onMounted, ref, inject, nextTick } from 'vue';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,6 +17,8 @@ const isPC = inject('isPC');
 const activeSlide = ref(0);
 const offsets = ref([]);
 const slideArr = ref([]);
+const startPos = ref({ x: 0, y: 0 });
+const endPos = ref({ x: 0, y: 0 });
 const content = [
   "我捐的錢全部都要用在弱勢身上！",
   "可是所有服務都有必要支出，\n如果沒人支持就無法幫助弱勢。",
@@ -29,38 +31,81 @@ const content = [
 ]
 
 function setSilde(e) {
-  console.log("setSilde", gsap.isTweening(".slideContent"));
+  console.log("setSilde", e, gsap.isTweening(".slideContent"));
   if (gsap.isTweening(".slideContent")) return;
-  if (!activeSlide.value && e.deltaY < 0 || activeSlide.value === 10 && e.deltaY > 0) return;
-  if (activeSlide.value === 9) return;
-  activeSlide.value = e.deltaY > 0 ? (activeSlide.value += 1) : (activeSlide.value -= 1);
-  slideAni();
+  if ((!activeSlide.value && e.deltaY < 0) || (activeSlide.value === 10 && e.deltaY > 0) || activeSlide.value === 9) return;
+  e.deltaY > 0 ? slideAni("next") : slideAni("prev");
 }
-function slideAni() {
+function slideAni(type) {
   console.log("slideAni", activeSlide.value);
+  if (gsap.isTweening(".slideContent")) return;
+  type === "next" ? (activeSlide.value += 1) : (activeSlide.value -= 1);
   gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
 }
 function changePage(val) {
-  console.log("ccc", val);
-  activeSlide.value = val === "next" ? 10 : 8;
-  slideAni();
+  console.log("changePage", val);
+  slideAni(val);
 }
-onMounted(() => {
-  slideArr.value = gsap.utils.toArray(".slides");
+function touchstart(e) {
+  console.log("touchstart");
+  startPos.x = e.changedTouches[0].pageX;
+  startPos.y = e.changedTouches[0].pageY;
+}
+function touchmove(e) {
+  console.log("touchmove");
+  endPos.x = e.changedTouches[0].pageX;
+  endPos.y = e.changedTouches[0].pageY;
+}
+function touchend() {
+  console.log("touchend12333",);
+  const x = endPos.x - startPos.x;
+  const y = endPos.y - startPos.y;
+  if (Math.abs(y) > Math.abs(x)) {
+    if (y > 0 && activeSlide.value < 9 && y > 15) {
+      console.log("下滑");
+      slideAni("next")
+    } else if (y < 0 && activeSlide.value > 0 && y < -15) {
+      console.log("上滑");
+      slideAni("prve");
+    }
+  }
+}
+
+//解決safari vh問題
+function safariHacks() {
+  let windowsVH = window.innerHeight / 100;
+  document.documentElement.style.setProperty('--vh', `${windowsVH}px`);
+  document.documentElement.style.setProperty('--vh', `${windowsVH}px`);
+  window.addEventListener('resize', function () {
+    document.documentElement.style.setProperty('--vh', `${windowsVH}px`);
+  });
+}
+
+function getSlider() {
+  console.log("getSlider");
+  slideArr.value = document.querySelectorAll(".slides");
+  console.log("aaa", slideArr.value);
   for (let i = 0; i < slideArr.value.length; i++) {
     offsets.value.push(-slideArr.value[i].offsetLeft);
   }
-  console.log("123", slideArr.value, isPC.value);
+}
+onMounted(() => {
+  nextTick(() => {
+    safariHacks();
+    getSlider();
+    console.log("123", offsets.value, isPC.value);
+  })
 });
 </script>
 
 <template>
-  <div class="w-full h-[calc(100vh-45px)] overflow-hidden lg:h-screen relative">
-    <div class="slideContent w-full h-full flex" @wheel.stop="setSilde">
+  <div :class="['overflow-hidden lg:h-screen relative', isPC ? 'h-screen' : 'wrap']">
+    <div class="slideContent w-full h-full flex" @wheel="setSilde" @touchstart="touchstart" @touchmove="touchmove"
+      @touchend="touchend">
       <IndexContent class="slides" />
       <!-- <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
-          :content="{ idx: idx + 1, text: item }" /> -->
-      <!-- <ShakeHand class="slides" @changePage="changePage" /> -->
+                :content="{ idx: idx + 1, text: item }" /> -->
+      <ShakeHand class="slides" @changePage="changePage" />
       <Article class="slides" />
     </div>
     <Scroll v-if="isPC && activeSlide < 9" />
@@ -74,5 +119,9 @@ onMounted(() => {
 <style scoped>
 .slides {
   @apply min-w-full relative;
+}
+
+.wrap {
+  height: calc(var(--vh, 1vh) * 100 - 45px);
 }
 </style>

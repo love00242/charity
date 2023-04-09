@@ -12,7 +12,7 @@ const props = defineProps({
 
 <template>
   <div
-    :class="['bg-primary flex items-center justify-between h-[45px] w-full pl-3.5 pr-2 py-1', { 'fixed bottom-0': !isInner }]">
+    :class="['bg-primary flex items-center justify-between h-[45px] w-full pl-3.5 py-1', { 'fixed bottom-0': !isInner }]">
     <div class="flex">
       <img class="mr-3" src="@/assets/icon/home.svg">
       <ShareSocialMedia />

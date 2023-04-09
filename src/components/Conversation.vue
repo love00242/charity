@@ -24,10 +24,11 @@ const isLeft = computed(() => props.content.idx % 2);
         </template>
         <!-- PC -->
         <template v-else>
+            <!-- 背景色 -->
             <p :class="['bg-[#e4e4e4]/[0.92] w-1/2 h-full absolute', {'z-[2]': !isLeft}]"></p>
             <p :class="['bg-black/60 w-1/2 h-full absolute right-0', {'z-[2]': isLeft}]"></p>
-            
-            <p :class="['font-bold text-[39px] text-center z-[1] whitespace-pre-line pr-[50%]', {'text-white pl-[50%] pr-0': !isLeft}]">{{ content.text }}</p>
+            <!-- 文字 -->
+            <p :class="['font-bold text-[39px] text-center z-[1] whitespace-pre-line pr-[50%]', {'text-white pl-[50%] whitespace-pre-wrap pr-[unset]': !isLeft}]">{{ content.text }}</p>
             <div class="flex w-full z-[1] justify-between px-[1%]">
                 <img class="w-[32%]" :src="leftMan">
                 <img class="w-[32%]" :src="rightMan">
