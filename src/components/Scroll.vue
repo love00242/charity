@@ -31,13 +31,13 @@ const props = defineProps({
     }
 }
 .scrollLine {
-    @apply bg-gradient-to-b h-6 animate-[scrollBar_2s_ease-in-out_infinite] lg:animate-[scrollBar_1.8s_ease-in-out_infinite] lg:w-0.5;
+    @apply bg-gradient-to-b h-6 animate-[scrollBar_2s_ease-in-out_infinite] lg:animate-[scrollBar_1.8s_ease-in-out_infinite] lg:w-1;
 }
 .scrollBase {
     @apply w-full h-full after:content-[''] after:absolute after:w-full after:h-full after:bg-opacity-40;
 }
 .center {
-    @apply absolute w-1 h-3 mx-auto top-[3px] right-[20px] lg:w-[13px] lg:h-7 lg:left-0 lg:right-[2.4px] lg:top-12;
+    @apply absolute w-1 h-3 mx-auto top-[3px] right-[20px] lg:w-[13px] lg:h-7 lg:left-0 lg:right-[3.4px] lg:top-12;
 }
 .text {
     @apply font-light text-[11px] [writing-mode:vertical-rl] lg:[writing-mode:unset] lg:text-[23px] lg:font-bold lg:pt-1;

@@ -1,8 +1,9 @@
 <script setup>
 import Footer from '@/components/Footer.vue';
 import Scroll from '@/components/Scroll.vue';
+import scrollTop from '@/components/scrollTop.vue';
 import { articleList, articleTitle } from '@/utils/config/articleConfig';
-import { onMounted, ref, inject } from 'vue';
+import { onMounted, ref, inject, onBeforeUnmount } from 'vue';
 import { useRoute } from "vue-router";
 import router from "@/router";
 
@@ -23,7 +24,7 @@ const ageRangeList = [
     { value: 5, text: "60歲以上" },
 ]
 const isPC = inject('isPC');
-const container = ref(null);
+const topDistance  = ref(0);
 const route = useRoute();
 const topAns = ref(null);
 const bottomAns = ref(null);
@@ -66,15 +67,25 @@ const goBack = () => {
 const goArticle = (num) => {
     router.replace({ path: '/articledetail', query: { article: num } });
 }
+const handleScroll = () => {
+    topDistance.value = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+}
+const goTop = () => {
+    window.scrollTo(0, 0);
+}
 onMounted(() => {
     console.log("query", route.query);
     articleNum.value = route.query.article;
     otherArticle.value = articleTitle.filter(item => item.num !== Number(articleNum.value));
+    window.addEventListener('scroll', handleScroll);
 });
+onBeforeUnmount(()=>{
+    window.addEventListener('scroll', handleScroll);
+})
 </script>
 
 <template>
-    <div ref="container" class="overflow-auto lg:bg-secondary">
+    <div class="overflow-auto lg:bg-secondary relative">
         <div
             :class="['bg-[length:100%_100%] h-[calc(100vh-45px)] text-white flex flex-row-reverse justify-center items-center relative lg:h-screen ]', `article${articleNum}`]">
             <h2 class="[writing-mode:vertical-rl] font-bold text-[40px] lg:[writing-mode:horizontal-tb] lg:text-6xl">{{
@@ -104,7 +115,7 @@ onMounted(() => {
                 <p class="font-medium">{{ articleList[articleNum - 1].author }}</p><br />
                 <p class="text-justify mb-5 whitespace-pre-line">{{ articleList[articleNum - 1].authorContent }}</p>
                 <template v-if="articleList[articleNum - 1].authorPhoto">
-                    <img class="mt-8 mb-2" :src="`/assets/article${articleNum}/author.png`">
+                    <img class="mt-8 mb-2 lg:w-full" :src="`/assets/article${articleNum}/author.png`">
                     <small class="flex mb-10">{{ articleList[articleNum - 1].authorPhotoCaption }}</small>
                 </template>
             </section>
@@ -123,7 +134,7 @@ onMounted(() => {
                         <p class="text-lg whitespace-pre-line mb-12 lg:text-xl">{{ val.text }}</p>
                         <template v-if="val.photoNum.length > 0">
                             <img v-for="(num, n) in val.photoNum" :key="'contentImg' + n"
-                                :src="`/assets/article${articleNum}/pic${num}.png`" class="mb-2">
+                                :src="`/assets/article${articleNum}/pic${num}.png`" class="mb-2 lg:w-full">
                             <small class="flex mb-10">{{ val.photoCaption }}</small>
                         </template>
                     </section>
@@ -185,8 +196,8 @@ onMounted(() => {
                     <img :src="`assets/article${item.num}/bg_pc.png`" class="w-[60%] min-h-[135px] lg:min-h-[188px] lg:w-full object-cover">
                 </li>
             </ul>
-
         </div>
+        <scrollTop v-if="isPC && topDistance > 1000" @click="goTop" />
     </div>
 </template>
 
