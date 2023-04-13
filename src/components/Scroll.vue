@@ -12,10 +12,9 @@ const props = defineProps({
 
 <template>
     <div class="flex mt-0.5 relative right-1 lg:bottom-[5.5%] lg:absolute lg:flex-col-reverse lg:right-5 lg:left-5 lg:items-center lg:mt-0">
-        <div class="overflow-y-clip w-[1px] h-[44px] relative mr-1 lg:w-[3px] lg:h-[103px]">
-            <div :class="['scrollBase', isGray ? 'after:bg-primary lg:bg-opacity-40':'after:bg-secondary lg:bg-opacity-90']"></div>
-            <div :class="['w-[1px] absolute top-0 -translate-x-[50%] scrollLine', isGray ? 'from-[#43434354] lg:to-[#434343]' : 'from-secondary/30 to-secondary lg:to-[#eec136]']"></div>
-            <div :class="['center', isGray ? 'bg-primary' : 'bg-secondary']"></div>
+        <div class="overflow-hidden w-[1px] h-[44px] relative mr-1 lg:w-[3px] lg:h-[103px] lg:ml-[6px]">
+            <div :class="['scrollBase', isGray ? 'after:bg-primary lg:bg-opacity-40':'after:bg-secondary lg:bg-opacity-30']"></div>
+            <div :class="['w-[1px] absolute top-0 -translate-x-[50%] scrollLine', isGray ? 'from-[#43434354] lg:to-[#434343]' : 'from-[#fecf3b00] to-secondary']"></div>
         </div>
         <p :class="['text', isGray ? 'text-primary' : 'text-secondary']">scroll</p>
     </div>
@@ -31,13 +30,10 @@ const props = defineProps({
     }
 }
 .scrollLine {
-    @apply bg-gradient-to-b h-6 animate-[scrollBar_2s_ease-in-out_infinite] lg:animate-[scrollBar_1.8s_ease-in-out_infinite] lg:w-1;
+    @apply bg-gradient-to-b h-6 animate-[scrollBar_2s_ease-in-out_infinite] lg:animate-[scrollBar_1.8s_ease-in-out_infinite] lg:w-1 lg:h-8;
 }
 .scrollBase {
-    @apply w-full h-full after:content-[''] after:absolute after:w-full after:h-full after:bg-opacity-40;
-}
-.center {
-    @apply absolute w-1.5 h-3 mx-auto top-[3px] -left-0.5 lg:w-[13px] lg:h-7 lg:-left-1 lg:right-[3.4px] lg:top-2;
+    @apply w-full h-full after:content-[''] after:absolute after:w-full after:h-full after:bg-opacity-40 lg:w-[1px];
 }
 .text {
     @apply font-light text-[11px] [writing-mode:vertical-rl] lg:[writing-mode:unset] lg:text-[23px] lg:font-bold lg:pt-1;
