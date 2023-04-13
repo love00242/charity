@@ -60,10 +60,10 @@ function touchend() {
   if (Math.abs(y) > Math.abs(x)) {
     if (y > 0 && activeSlide.value < 9 && y > 5) {
       console.log("下滑");
-      slideAni("next")
+      slideAni("prve");
     } else if (y < 0 && activeSlide.value > 0 && y < -5) {
       console.log("上滑");
-      slideAni("prve");
+      slideAni("next")
     }
   }
 }
