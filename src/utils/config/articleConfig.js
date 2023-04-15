@@ -16,6 +16,7 @@ export const articleList = [
         sections: [
             {
                 isQuote: false,
+                isIframe: true,
                 title: "九成失敗，台灣公益界3大創新困境",
                 content: [
                     {

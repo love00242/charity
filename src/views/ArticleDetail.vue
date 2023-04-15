@@ -159,6 +159,9 @@ onBeforeUnmount(() => {
                     </span>
                 </section>
                 <template v-else>
+                    <div v-if="item.isIframe" class="w-[calc(100%-40px)] h-0 pb-[56.25%] relative m-auto">
+                        <iframe class="absolute w-full h-full top-0" src="https://www.youtube.com/embed/7C82b0gq0rQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
                     <p
                         class="mt-10 px-5 text-[25px] font-bold mb-4 whitespace-pre-line lg:text-center lg:text-4xl lg:mb-7 lg:leading-tight">
                         {{ item.title }}</p>
