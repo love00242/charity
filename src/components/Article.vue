@@ -77,10 +77,9 @@ async function sendMail() {
                         class="border-[0.5px] border-secondary rounded-[5px] cursor-pointer bg-[#fff] flex flex-col items-center justify-around min-h-[270px] mx-2 px-5 min-w-[250px] w-[250px]">
                         <img :src="slide.icon">
                         <h2 class="text-2xl text-left">{{ slide.title }}</h2>
-                        <div class="flex mr-auto">
+                        <div class="flex mr-auto items-baseline">
                             <p class="text-primary text-xl">看文章</p>
-                            <!-- 缺箭頭 -->
-                            <img class="ml-[15px] arrow" src="@/assets/icon/arrow_left.svg">
+                            <img class="ml-[15px] arrow" src="@/assets/icon/arrow.svg">
                         </div>
                     </li>
                 </ul>
@@ -132,7 +131,7 @@ async function sendMail() {
     }
     75% {
         opacity: 0;
-        transform : translateX(-100%);
+        transform : translateX(-50%);
     }
     100% {
         opacity: 1;
