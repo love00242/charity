@@ -11,7 +11,7 @@ const endPos = ref({ x: 0, y: 0 });
 
 function slideAni(e, type) {
     if (e?.deltaY < 0 || type === "prev") {
-        !isFinish.value && emit("changePage", "prev");
+        !isFinish.value && emit("changePage", "prev", true);
         isFinish.value = false;
         tl.reverse(-1);
         return
@@ -25,9 +25,10 @@ function slideAni(e, type) {
 }
 
 function shakehandAni() {
+    const diff = isPC.value ? 130 : 0;
     tl.play();
-    tl.to('.lefthand', { x: 45, duration: .6 })
-    tl.to('.righthand', { x: -45, duration: .6 }, "<")
+    tl.to('.lefthand', { x: 175 - diff, duration: .6 })
+    tl.to('.righthand', { x: -175 + diff, duration: .6 }, "<")
     tl.to('.lefthand', { opacity: 0, duration: .1 })
     tl.to('.righthand', { opacity: 0, duration: .1 }, "<")
     tl.to('.shakehand1', { opacity: 1, duration: .1 }, "<")
@@ -52,13 +53,7 @@ function touchend() {
     const x = endPos.x - startPos.x;
     const y = endPos.y - startPos.y;
     if (Math.abs(y) > Math.abs(x)) {
-        if (y > 0) {
-            console.log("下滑", y);
-            slideAni(null, "next")
-        } else if (y < 0) {
-            console.log("上滑 hand", y);
-            slideAni(null, "prev");
-        }
+        y < 0 ? slideAni(null, "next") : slideAni(null, "prev");
     }
 }
 </script>
@@ -67,9 +62,9 @@ function touchend() {
     <div class="flex flex-col justify-around bg-[length:100%_100%] bg-[url('@/assets/bg/shakehand.png')] overflow-hidden lg:bg-[url('@/assets/bg/shakehand_pc.png')] w-full"
         @wheel.stop="slideAni" @touchstart="touchstart" @touchmove="touchmove" @touchend.stop="touchend">
         <div class="flex relative h-1/2 py-5 justify-center">
-            <img class="lefthand absolute -left-[55%] h-[139px] md:h-[260px] lg:-left-[40%] lg:h-[342px] xl:-left-[30%] lg:w-1/2"
+            <img class="lefthand absolute -left-[100%] h-[139px] md:h-[260px] lg:-left-[10%] lg:h-[342px] lg:w-1/2"
                 src="@/assets/icon/lefthand.svg">
-            <img class="righthand absolute -right-[55%] h-[139px] md:h-[260px] lg:-right-[50%] lg:h-[342px] xl:-right-[30%] lg:w-1/2"
+            <img class="righthand absolute -right-[100%] h-[139px] md:h-[260px] lg:-right-[10%] lg:h-[342px] lg:w-1/2"
                 src="@/assets/icon/righthand.svg">
             <img class="shakehand1 absolute opacity-0 max-w-fit h-[139px] md:h-[260px] 2xl:h-[400px]"
                 src="@/assets/icon/shakehand1.svg">

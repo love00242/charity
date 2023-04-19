@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52.65" height="50.781" viewBox="0 0 52.65 50.781">
+  <g id="Group_1028" data-name="Group 1028" transform="translate(13686.785 -17098.002)">
+    <path id="wb_shade_FILL0_wght700_GRAD0_opsz48" d="M76.067,292.781a4.894,4.894,0,0,1-3.149-1.011,3.091,3.091,0,0,1-1.269-2.509V261.249H70.428a2.188,2.188,0,0,1-2.115-1.161,1.436,1.436,0,0,1,.423-1.985l19.551-15.579A7.749,7.749,0,0,1,89.978,242a7.138,7.138,0,0,1,1.6.524L111.127,258.1a1.478,1.478,0,0,1,.47,1.985,2.089,2.089,0,0,1-2.068,1.161h-1.222v28.012a3.091,3.091,0,0,1-1.269,2.509,4.893,4.893,0,0,1-3.149,1.011Z" transform="translate(-13754.871 16856.002)" fill="#434343"/>
+    <g id="Group_1027" data-name="Group 1027" transform="translate(-28.785 -0.217)">
+      <ellipse id="Ellipse_218" data-name="Ellipse 218" cx="6.964" cy="7.625" rx="6.964" ry="7.625" transform="translate(-13626 17121)" fill="#fecf3b"/>
+      <g id="Group_1026" data-name="Group 1026" transform="translate(-13633 17125.26)">
+        <ellipse id="Ellipse_216" data-name="Ellipse 216" cx="6.144" cy="6.728" rx="6.144" ry="6.728" fill="#fecf3b"/>
+        <ellipse id="Ellipse_217" data-name="Ellipse 217" cx="6.144" cy="6.728" rx="6.144" ry="6.728" transform="translate(15.361)" fill="#fecf3b"/>
+      </g>
+      <path id="Path_3077" data-name="Path 3077" d="M0,0H14.323V17.953H0Z" transform="translate(-13626 17131.047)" fill="#fecf3b"/>
+      <rect id="Rectangle_686" data-name="Rectangle 686" width="14.323" height="3" transform="translate(-13626 17144)" fill="#434343"/>
+    </g>
+    <rect id="Rectangle_687" data-name="Rectangle 687" width="6" height="10" transform="translate(-13667.785 17116)" fill="#fecf3b"/>
+  </g>
+</svg>

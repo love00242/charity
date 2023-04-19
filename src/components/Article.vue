@@ -77,9 +77,9 @@ async function sendMail() {
                         class="border-[0.5px] border-secondary rounded-[5px] cursor-pointer bg-[#fff] flex flex-col items-center justify-around min-h-[270px] mx-2 px-5 min-w-[250px] w-[250px]">
                         <img :src="slide.icon">
                         <h2 class="text-2xl text-left">{{ slide.title }}</h2>
-                        <div class="flex mr-auto">
+                        <div class="flex mr-auto items-baseline">
                             <p class="text-primary text-xl">看文章</p>
-                            <img class="-rotate-90 ml-[15px]" src="@/assets/icon/scroll.svg">
+                            <img class="ml-[15px] arrow" src="@/assets/icon/arrow.svg">
                         </div>
                     </li>
                 </ul>
@@ -116,5 +116,26 @@ async function sendMail() {
 
 .container::-webkit-scrollbar-thumb {
     @apply bg-[#434343];
+}
+.arrow {
+    @apply hover:animate-[moveArrow_1s];
+}
+@keyframes moveArrow {
+    0% {
+        opacity: 1;
+        transform : translateX(0px);
+    }
+    50% {
+        opacity: 0;
+        transform : translateX(100%);
+    }
+    75% {
+        opacity: 0;
+        transform : translateX(-50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 </style>

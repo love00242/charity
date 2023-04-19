@@ -18,6 +18,8 @@ const isPC = inject('isPC');
 const activeSlide = ref(0);
 const offsets = ref([]);
 const slideArr = ref([]);
+const conversationDom = ref(null);
+const indexContentDom = ref(null);
 const startPos = ref({ x: 0, y: 0 });
 const endPos = ref({ x: 0, y: 0 });
 const content = [
@@ -32,19 +34,18 @@ const content = [
 ]
 
 function setSilde(e) {
-  if (gsap.isTweening(".slideContent")) return;
+  console.log("setSilde");
+  // if (gsap.isTweening(".slideContent")) return;
   if ((!activeSlide.value && e.deltaY < 0) || (activeSlide.value === 10 && e.deltaY > 0) || activeSlide.value === 9) return;
   e.deltaY > 0 ? slideAni("next") : slideAni("prev");
 }
-function slideAni(type) {
-  if (gsap.isTweening(".slideContent")) return;
+function slideAni(type, isBackConversation) {
+  console.log("slideAni");
+  // if (gsap.isTweening(".slideContent")) return;
   type === "next" ? (activeSlide.value += 1) : (activeSlide.value -= 1);
   sessionStorage.setItem("slideNum", activeSlide.value);
-
+  isBackConversation && changeConversation();
   gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
-}
-function changePage(val) {
-  slideAni(val);
 }
 function touchstart(e) {
   startPos.x = e.changedTouches[0].pageX;
@@ -58,12 +59,12 @@ function touchend() {
   const x = endPos.x - startPos.x;
   const y = endPos.y - startPos.y;
   if (Math.abs(y) > Math.abs(x)) {
-    if (y > 0 && activeSlide.value < 9 && y > 5) {
+    if (activeSlide.value > 0 && y > 5) {
       console.log("下滑");
-      slideAni("next")
-    } else if (y < 0 && activeSlide.value > 0 && y < -5) {
-      console.log("上滑");
       slideAni("prve");
+    } else if (activeSlide.value < 9 && y < -5) {
+      console.log("上滑");
+      slideAni("next")
     }
   }
 }
@@ -83,11 +84,22 @@ function getSlider() {
   for (let i = 0; i < slideArr.value.length; i++) {
     offsets.value.push(-slideArr.value[i].offsetLeft);
   }
+  console.log("offsets", offsets.value);
   sessionStorage.getItem("slideNum") > 0 && changeSlide();
 }
-function changeSlide () {
+function changeSlide() {
+  console.log("changeSlide");
   activeSlide.value = Number(sessionStorage.getItem("slideNum"));
   gsap.set('.slideContent', { x: offsets.value[activeSlide.value] });
+}
+function changeConversation() {
+  console.log("changeConversation", conversationDom.value, activeSlide.value);
+  activeSlide.value = Number(sessionStorage.getItem("slideNum"));
+  if (activeSlide.value === 9) {
+    gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
+    return
+  }
+  activeSlide.value ? conversationDom.value[activeSlide.value - 1].play() : indexContentDom.value.reverse();
 }
 onMounted(() => {
   nextTick(async () => {
@@ -105,12 +117,12 @@ onBeforeUnmount(() => {
 
 <template>
   <div :class="['overflow-hidden lg:h-screen relative', isPC ? 'h-screen' : 'wrap']">
-    <div class="slideContent w-full h-full flex relative" @wheel="setSilde" @touchstart="touchstart" @touchmove="touchmove"
-      @touchend="touchend">
-      <IndexContent class="slides" />
-      <Conversation class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
-        :content="{ idx: idx + 1, text: item }" />
-      <ShakeHand class="slides" @changePage="changePage" />
+    <div class="slideContent w-full h-full flex relative" @wheel="setSilde" @touchstart="touchstart"
+      @touchmove="touchmove" @touchend="touchend">
+      <IndexContent ref="indexContentDom" class="slides" :offsets="offsets" @changeConversation="changeConversation" />
+      <Conversation ref="conversationDom" class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
+        :content="{ idx: idx + 1, text: item }" :offsets="offsets" @changeConversation="changeConversation" />
+      <ShakeHand class="slides" @changePage="slideAni" />
       <Article class="slides" @changeSlide="changeSlide" />
     </div>
     <Scroll v-if="isPC && activeSlide < 9" />

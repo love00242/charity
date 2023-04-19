@@ -7,7 +7,7 @@ $errMsg = "";
 try{
     require_once("connectDB.php");
     
-    $sql = "insert into `questionnairedb_article` (`topAns1`, `bottomAns1`, `topAns2`, `bottomAns2`, `topAns3`, `bottomAns3`, `topAns4`, `bottomAns4`, `topAns5`, `bottomAns5`, `member`, `gender`, `ageRange`) values (:topAns1, :bottomAns1, :topAns2, :bottomAns2, :topAns3, :bottomAns3, :topAns4, :bottomAns4, :topAns5, :bottomAns5, :member, :gender, :ageRange)";
+    $sql = "insert into `questionnairedb_article` (`topAns1`, `bottomAns1`, `topAns2`, `bottomAns2`, `topAns3`, `bottomAns3`, `topAns4`, `bottomAns4`, `topAns5`, `bottomAns5`, `topAns6`, `bottomAns6`, `member`, `gender`, `ageRange`) values (:topAns1, :bottomAns1, :topAns2, :bottomAns2, :topAns3, :bottomAns3, :topAns4, :bottomAns4, :topAns5, :bottomAns5, :topAns6, :bottomAns6, :member, :gender, :ageRange)";
     $usertdata = $pdo->prepare( $sql );
     $usertdata -> bindValue(":topAns1", $_POST["topAns1"]);
     $usertdata -> bindValue(":bottomAns1", $_POST["bottomAns1"]);
@@ -19,6 +19,8 @@ try{
     $usertdata -> bindValue(":bottomAns4", $_POST["bottomAns4"]);
     $usertdata -> bindValue(":topAns5", $_POST["topAns5"]);
     $usertdata -> bindValue(":bottomAns5", $_POST["bottomAns5"]);
+    $usertdata -> bindValue(":topAns6", $_POST["topAns6"]);
+    $usertdata -> bindValue(":bottomAns6", $_POST["bottomAns6"]);
     
     $usertdata -> bindValue(":member", $_POST["member"]);
     $usertdata -> bindValue(":gender", $_POST["gender"]);
