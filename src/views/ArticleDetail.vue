@@ -257,6 +257,10 @@ onBeforeUnmount(() => {
     @apply bg-[url('@/assets/article5/bg.png')] lg:bg-[url('@/assets/article5/bg_pc.png')];
 }
 
+.article6 {
+    @apply bg-[url('@/assets/article6/bg.png')] lg:bg-[url('@/assets/article6/bg_pc.png')];
+}
+
 .yellowArea {
     @apply bg-secondary rounded-lg mx-5 my-10 px-5 py-6 text-lg lg:w-[95%] lg:px-8 lg:text-center lg:text-2xl lg:mx-auto lg:my-3;
 }
