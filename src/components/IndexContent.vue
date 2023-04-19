@@ -32,7 +32,8 @@ function moveWord(e) {
 }
 function mobileSlide() {
     tl.play();
-    tl.to('.slideContent', { x: `${props.offsets[1]}`, duration: 0 })
+    tl.to('.slideContent', { x: `${props.offsets[1]}`, opacity: 0.6, duration: 0}, "<")
+    tl.to('.slideContent', { opacity: 1 , duration: 1})
 }
 function touchstart(e) {
     startPos.x = e.changedTouches[0].pageX;
