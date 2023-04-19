@@ -11,7 +11,7 @@ const endPos = ref({ x: 0, y: 0 });
 
 function slideAni(e, type) {
     if (e?.deltaY < 0 || type === "prev") {
-        !isFinish.value && emit("changePage", "prev");
+        !isFinish.value && emit("changePage", "prev", true);
         isFinish.value = false;
         tl.reverse(-1);
         return
@@ -53,13 +53,7 @@ function touchend() {
     const x = endPos.x - startPos.x;
     const y = endPos.y - startPos.y;
     if (Math.abs(y) > Math.abs(x)) {
-        if (y > 0) {
-            console.log("下滑", y);
-            slideAni(null, "next")
-        } else if (y < 0) {
-            console.log("上滑 hand", y);
-            slideAni(null, "prev");
-        }
+        y < 0 ? slideAni(null, "next") : slideAni(null, "prev");
     }
 }
 </script>

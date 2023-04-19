@@ -14,8 +14,11 @@ const props = defineProps({
     },
     offsets: Array,
 });
-const tl = gsap.timeline();
+const wordTl = gsap.timeline();
 const isPC = inject('isPC');
+const startPos = ref({ x: 0, y: 0 });
+const endPos = ref({ x: 0, y: 0 });
+
 const isLeft = computed(() => props.content.idx % 2);
 // 電腦版字太多高度會超出 fix
 const maxWidth = computed(() => {
@@ -27,24 +30,67 @@ const maxWidth = computed(() => {
 });
 
 function play() {
-    tl.restart();
+    console.log("play3333");
+    wordTl.restart();
 }
 function move(e) {
+    console.log("move");
+    e.deltaY < 0 ? setSlideType("prev") : setSlideType("next");
+}
+function setSlideType(type) {
     let nowSlide = Number(sessionStorage.getItem("slideNum"));
-    console.log("move", nowSlide);
-    if (e.deltaY < 0 && nowSlide) {
+
+    if (type === "prev" && nowSlide) {
         nowSlide -= 1;
-    } else if (e.deltaY > 0 && nowSlide <= 8) {
+    } else if (type === "next" && nowSlide <= 8) {
         nowSlide += 1;
     }
     sessionStorage.setItem("slideNum", nowSlide);
-    const tl = gsap.timeline();
-    tl.to('.slideContent', { x: `${props.offsets[nowSlide]}`, duration: 0 })
+    if (isPC.value || type === "prev") {
+        const contentTl = gsap.timeline();
+        contentTl.to('.slideContent', { x: `${props.offsets[nowSlide]}`, duration: 0 })
+    } else {
+        mobileSlide();
+    }
     emit("changeConversation");
+    console.log("end---------", nowSlide);
+}
+function mobileSlide() {
+    let nowSlide = Number(sessionStorage.getItem("slideNum"));
+    const contentTl = gsap.timeline();
+    console.log(props.offsets[nowSlide], "mobileSlide");
+    if (isLeft.value || nowSlide === 9) {
+        contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: 1 });
+    } else {
+        const gap = Math.abs(props.offsets[1]);
+        contentTl.set(".slideContent", { x: props.offsets[nowSlide] - gap });
+        contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: 1 });
+    }
+
+}
+function touchstart(e) {
+    startPos.x = e.changedTouches[0].pageX;
+    startPos.y = e.changedTouches[0].pageY;
+}
+function touchmove(e) {
+    endPos.x = e.changedTouches[0].pageX;
+    endPos.y = e.changedTouches[0].pageY;
+}
+function touchend() {
+    const x = endPos.x - startPos.x;
+    const y = endPos.y - startPos.y;
+    if (Math.abs(y) < Math.abs(x)) return;
+    if (y > 5) {
+        console.log("下滑");
+        setSlideType("prev")
+    } else if (y < -5) {
+        console.log("上滑");
+        setSlideType("next")
+    }
 }
 onMounted(async () => {
     await nextTick();
-    tl.to(`.wordAni${props.content.idx}`, {
+    wordTl.to(`.wordAni${props.content.idx}`, {
         duration: 2,
         text: props.content.text,
         delay: 0.6
@@ -58,12 +104,12 @@ defineExpose({
 
 <template>
     <div :class="[isPC ? 'pcBg' : isLeft ? 'leftBg' : 'rightBg items-end', 'flex justify-end flex-col bg-[length:100%_100%] relative']"
-        @wheel.stop="move">
+        @wheel.stop="move" @touchstart.stop="touchstart" @touchmove="touchmove" @touchend.stop="touchend">
         <!-- 手機 -->
         <template v-if="!isPC">
             <div :class="['w-full h-full absolute z-0 ', isLeft ? 'bg-[#e4e4e4]/20' : 'bg-[#3f3f3f]/40']" />
             <p
-                :class="['wordAni font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line md:mb-[10%]', { 'text-white': !isLeft }]">
+                :class="[`wordAni${props.content.idx} font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line md:mb-[10%]`, { 'text-white': !isLeft }]">
             </p>
             <div class="flex w-[85%] z-[1]">
                 <img :src="isLeft ? leftMan : rightMan">

@@ -35,15 +35,16 @@ const content = [
 
 function setSilde(e) {
   console.log("setSilde");
-  if (gsap.isTweening(".slideContent")) return;
+  // if (gsap.isTweening(".slideContent")) return;
   if ((!activeSlide.value && e.deltaY < 0) || (activeSlide.value === 10 && e.deltaY > 0) || activeSlide.value === 9) return;
   e.deltaY > 0 ? slideAni("next") : slideAni("prev");
 }
-function slideAni(type) {
+function slideAni(type, isBackConversation) {
   console.log("slideAni");
-  if (gsap.isTweening(".slideContent")) return;
+  // if (gsap.isTweening(".slideContent")) return;
   type === "next" ? (activeSlide.value += 1) : (activeSlide.value -= 1);
   sessionStorage.setItem("slideNum", activeSlide.value);
+  isBackConversation && changeConversation();
   gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
 }
 function touchstart(e) {
@@ -58,10 +59,10 @@ function touchend() {
   const x = endPos.x - startPos.x;
   const y = endPos.y - startPos.y;
   if (Math.abs(y) > Math.abs(x)) {
-    if (y > 0 && activeSlide.value < 9 && y > 5) {
+    if (activeSlide.value > 0 && y > 5) {
       console.log("下滑");
       slideAni("prve");
-    } else if (y < 0 && activeSlide.value > 0 && y < -5) {
+    } else if (activeSlide.value < 9 && y < -5) {
       console.log("上滑");
       slideAni("next")
     }
@@ -92,13 +93,13 @@ function changeSlide() {
   gsap.set('.slideContent', { x: offsets.value[activeSlide.value] });
 }
 function changeConversation() {
-  console.log("changeConversation", conversationDom.value);
+  console.log("changeConversation", conversationDom.value, activeSlide.value);
   activeSlide.value = Number(sessionStorage.getItem("slideNum"));
-  if(activeSlide.value === 9) {
+  if (activeSlide.value === 9) {
     gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
     return
   }
-  activeSlide.value ? conversationDom.value[activeSlide.value - 1].play() : indexContentDom.value.reverse();  
+  activeSlide.value ? conversationDom.value[activeSlide.value - 1].play() : indexContentDom.value.reverse();
 }
 onMounted(() => {
   nextTick(async () => {
@@ -120,7 +121,7 @@ onBeforeUnmount(() => {
       @touchmove="touchmove" @touchend="touchend">
       <IndexContent ref="indexContentDom" class="slides" :offsets="offsets" @changeConversation="changeConversation" />
       <Conversation ref="conversationDom" class="slides" v-for="(item, idx) in content" :key="'slides' + idx"
-        :content="{ idx: idx + 1, text: item }"  :offsets="offsets" @changeConversation="changeConversation" />
+        :content="{ idx: idx + 1, text: item }" :offsets="offsets" @changeConversation="changeConversation" />
       <ShakeHand class="slides" @changePage="slideAni" />
       <Article class="slides" @changeSlide="changeSlide" />
     </div>

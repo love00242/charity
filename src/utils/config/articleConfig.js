@@ -3,6 +3,7 @@ import moneyIcon from '@/assets/icon/article2.svg';
 import phoneIcon from '@/assets/icon/article3.svg';
 import heartIcon from '@/assets/icon/article4.svg';
 import plantIcon from '@/assets/icon/article5.svg';
+import houseIcon from '@/assets/icon/article6.svg';
 
 export const articleList = [
     {
@@ -696,5 +697,5 @@ export const articleTitle = [
     { num: 3, title: "擁抱數位轉型浪潮，社福卻差點滅頂，為什麼？", icon: phoneIcon },
     { num: 4, title: "社福進社區做好事，為什麼卻被下跪抗議？", icon: heartIcon },
     { num: 5, title: "善與惡的拔河，你希望誰獲勝。", icon: plantIcon },
-    { num: 6, title: "街頭的愛心餅乾，背後水有多深？", icon: heartIcon },
+    { num: 6, title: "街頭的愛心餅乾，背後水有多深？", icon: houseIcon },
 ]
