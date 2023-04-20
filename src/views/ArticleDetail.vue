@@ -58,7 +58,7 @@ const changeState = (type, val) => {
 }
 async function sendData() {
     console.log("sendData");
-    if (topAns.value === null || bottomAns.value === null || member === "" || gender === "" || ageRange === null) {
+    if (member === "" || gender === "" || ageRange === null) {
         alert("還有題目尚未作答");
         return
     }
@@ -72,6 +72,7 @@ async function sendData() {
     data.append("ageRange", ageRange.value)
 
     const result = await axios.post(api, data, config);
+    alert("謝謝你的作答");
     console.log(result.status);
 }
 const goBack = () => {
@@ -216,7 +217,7 @@ onBeforeUnmount(() => {
                 <button class="btn w-[120px] py-3 mx-auto lg:w-[240px]" @click="sendData">確定</button>
             </section>
             <div class="flex justify-center mb-8 lg:flex-col lg:items-center lg:mt-8">
-                <button class="btn w-[120px] py-3 text-lg flex items-center justify-center lg:w-[240px] lg:mb-4"
+                <button class="btn w-[120px] py-3 text-lg flex items-center justify-center lg:text-2xl lg:w-[240px] lg:mb-4"
                     @click="goBack">
                     回前頁
                     <img src="@/assets/icon/back.svg" class="w-4 ml-1">
@@ -225,7 +226,7 @@ onBeforeUnmount(() => {
             </div>
             <ul class="flex flex-col mt-10 mb-8 px-5 text-lg text-[#5C5B5B] lg:flex-row lg:items-baseline">
                 <li v-for="(item, i) in otherArticle.slice(0, 3)" :key="'article' + i"
-                    class="flex mb-2 lg:flex-col-reverse lg:mx-2 lg:w-1/3" @click="goArticle(item.num)">
+                    class="flex mb-2 cursor-pointer lg:flex-col-reverse lg:mx-2 lg:w-1/3" @click="goArticle(item.num)">
                     <p class="w-[40%] lg:w-full">{{ item.title }}</p>
                     <img :src="getImageUrl('bg', item.num)"
                         class="w-[60%] min-h-[135px] lg:min-h-[188px] lg:w-full object-cover">

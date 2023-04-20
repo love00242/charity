@@ -99,7 +99,7 @@ function changeConversation() {
     gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
     return
   }
-  activeSlide.value ? conversationDom.value[activeSlide.value - 1].play() : indexContentDom.value.reverse();
+  !activeSlide.value && indexContentDom.value.reverse();
 }
 onMounted(() => {
   nextTick(async () => {

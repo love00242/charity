@@ -28,7 +28,7 @@ const toggleShare = () => {
 
 <template>
     <template v-if="isPC">
-        <p v-if="!isOpenShare" @click="toggleShare" :class="['flex rounded-[3px] justify-center items-center text-lg cursor-pointer', isArticleDetail ? 'btn py-3 w-[240px]' : 'w-24 bg-[#434343] text-secondary leading-[unset] h-[37px]'
+        <p v-if="!isOpenShare" @click="toggleShare" :class="['flex rounded-[3px] justify-center items-center text-lg cursor-pointer', isArticleDetail ? 'btn py-3 w-[240px] lg:text-2xl' : 'w-24 bg-[#434343] text-secondary leading-[unset] h-[37px]'
         ]">
             分享<img :src="isArticleDetail ? share_pc : share_pc_yellow" class="w-4 ml-1.5">
         </p>
