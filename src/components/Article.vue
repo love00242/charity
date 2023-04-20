@@ -87,16 +87,16 @@ async function sendMail() {
                     <img class="rotate-180" src="@/assets/icon/arrow_left.svg">
                 </button>
             </div>
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-center lg:mt-8 lg:mb-6">
-                <div class="flex mt-4 lg:mt-0 lg:mr-3">
-                    <img class="w-8 mr-1.5" src="@/assets/icon/mail.svg">
+            <div class="flex mt-4 mx-2 flex-wrap items-start lg:justify-center lg:mx-0 lg:mt-8 lg:mb-6">
+                <img class="w-10 lg:w-11 mr-1.5 lg:mr-2.5" src="@/assets/icon/mail.svg">
+                <div class="flex flex-col w-[85%] lg:w-[unset] lg:min-w-[450px]">
                     <input type="text"
                         class="h-9 px-2 border text-primary bg-white border-primary text-lg placeholder:text-[#ccc] placeholder:font-light lg:text-xl"
                         placeholder="Email" v-model="mail">
+                    <p class="text-primary text-xl mt-1.5">我願意收到新文章的上線提醒</p>
                 </div>
-                <p class="text-primary text-xl mt-1.5 pl-9 lg:mt-0 lg:pl-0 lg:text-xl">我願意收到新文章的上線提醒</p>
+                <button class="btn ml-[46px] mt-3 min-w-[93px] text-lg lg:ml-4 lg:mt-0" @click="sendMail">送出</button>
             </div>
-            <button class="btn ml-9 mt-2 mb-3 w-[93px] text-lg lg:block lg:m-auto" @click="sendMail">送出</button>
             <div v-if="isPC" class="flex justify-center my-4 items-center">
                 <img src="@/assets/icon/home_pc.svg" class="mr-2.5 w-[37px] cursor-pointer" @click="goHome">
                 <ShareSocialMedia />
