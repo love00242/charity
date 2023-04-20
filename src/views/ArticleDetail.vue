@@ -123,7 +123,7 @@ onBeforeUnmount(() => {
             </h2>
             <template v-if="isPC">
                 <img class="absolute w-12 left-8 top-8 cursor-pointer" src="@/assets/icon/home.svg" @click="goHome">
-                <Scroll :isGray="true" />
+                <Scroll />
             </template>
         </div>
         <Footer v-if="!isPC" :isInner="true" />
