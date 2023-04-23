@@ -18,18 +18,6 @@ onMounted(() => {
   window.addEventListener('resize', debounce(() => {
     isPC.value = window.innerWidth >= 1024;
   }));
-  useMeta({
-    meta: [
-      {
-        name: 'og:title',
-        content: "測試測試"
-      },
-      {
-        property: "og:image",
-        content: "public/meta_index.png"
-      },
-    ]
-  })
 });
 </script>
 
