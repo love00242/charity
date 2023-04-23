@@ -1,12 +1,12 @@
 <script setup>
-import { computed, inject, nextTick, onMounted, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import leftMan from '@/assets/main/leftman.png';
 import rightMan from '@/assets/main/rightman.png';
 import gsap from 'gsap';
-import TextPlugin from 'gsap/TextPlugin';
+// import TextPlugin from 'gsap/TextPlugin';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(TextPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 const emit = defineEmits(["changeConversation"])
 const props = defineProps({
     content: {
@@ -14,7 +14,8 @@ const props = defineProps({
     },
     offsets: Array,
 });
-const wordTl = gsap.timeline();
+// const wordTl = gsap.timeline();
+const contentTl = gsap.timeline();
 const isPC = inject('isPC');
 const startPos = ref({ x: 0, y: 0 });
 const endPos = ref({ x: 0, y: 0 });
@@ -29,15 +30,12 @@ const maxWidth = computed(() => {
     return rate * img.width / (innerWidth * 0.98) * 100
 });
 
-function play() {
-    console.log("play3333");
-    wordTl.restart();
-}
 function move(e) {
     console.log("move");
     e.deltaY < 0 ? setSlideType("prev") : setSlideType("next");
 }
 function setSlideType(type) {
+    console.log("setSlideType");
     let nowSlide = Number(sessionStorage.getItem("slideNum"));
 
     if (type === "prev" && nowSlide) {
@@ -47,7 +45,6 @@ function setSlideType(type) {
     }
     sessionStorage.setItem("slideNum", nowSlide);
     if (isPC.value || type === "prev") {
-        const contentTl = gsap.timeline();
         contentTl.to('.slideContent', { x: `${props.offsets[nowSlide]}`, duration: 0 })
     } else {
         mobileSlide();
@@ -57,9 +54,15 @@ function setSlideType(type) {
 }
 function mobileSlide() {
     let nowSlide = Number(sessionStorage.getItem("slideNum"));
-    const contentTl = gsap.timeline();
-    console.log(props.offsets[nowSlide], "mobileSlide");
-    if (isLeft.value || nowSlide === 9) {
+    // const contentTl = gsap.timeline();
+    console.log(nowSlide, "mobileSlide");
+    if(nowSlide === 9) {
+        contentTl.to(".slideContent", { x: props.offsets[nowSlide], opacity: 0.5, duration: 0 }, "<");
+        contentTl.to(".slideContent", { opacity: 1 , duration: 1})
+        return
+    }
+    console.log("in", isLeft.value);
+    if (isLeft.value) {
         contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: 1 });
     } else {
         const gap = Math.abs(props.offsets[1]);
@@ -88,18 +91,6 @@ function touchend() {
         setSlideType("next")
     }
 }
-onMounted(async () => {
-    await nextTick();
-    wordTl.to(`.wordAni${props.content.idx}`, {
-        duration: 2,
-        text: props.content.text,
-        delay: 0.6
-    });
-})
-
-defineExpose({
-    play,
-})
 </script>
 
 <template>
@@ -108,9 +99,7 @@ defineExpose({
         <!-- 手機 -->
         <template v-if="!isPC">
             <div :class="['w-full h-full absolute z-0 ', isLeft ? 'bg-[#e4e4e4]/20' : 'bg-[#3f3f3f]/40']" />
-            <p
-                :class="[`wordAni${props.content.idx} font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line md:mb-[10%]`, { 'text-white': !isLeft }]">
-            </p>
+            <p :class="['font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line md:mb-[10%]', { 'text-white': !isLeft }]">{{ content.text }}</p>
             <div class="flex w-[85%] z-[1]">
                 <img :src="isLeft ? leftMan : rightMan">
             </div>
@@ -121,9 +110,7 @@ defineExpose({
             <p :class="['bg-[#e4e4e4]/[0.92] w-1/2 h-full absolute', { 'z-[2]': !isLeft }]"></p>
             <p :class="['bg-black/60 w-1/2 h-full absolute right-0', { 'z-[2]': isLeft }]"></p>
             <!-- 文字 -->
-            <p
-                :class="[`wordAni${props.content.idx} font-bold text-[39px] text-center z-[1] whitespace-pre-line pr-[50%]`, { 'text-white pl-[50%] whitespace-pre-wrap pr-[unset]': !isLeft }]">
-            </p>
+            <p :class="['font-bold text-[39px] text-center z-[1] whitespace-pre-line pr-[50%]', { 'text-white pl-[50%] whitespace-pre-wrap pr-[unset]': !isLeft }]">{{ content.text }}</p>
             <div class="flex w-full z-[1] justify-between px-[1%]">
                 <img class="w-[32%]" :style="`max-width: ${maxWidth}%`" :src="leftMan">
                 <img class="w-[32%]" :style="`max-width: ${maxWidth}%`" :src="rightMan">
