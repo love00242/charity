@@ -15,6 +15,7 @@ const props = defineProps({
     offsets: Array,
 });
 // const wordTl = gsap.timeline();
+const contentTl = gsap.timeline();
 const isPC = inject('isPC');
 const startPos = ref({ x: 0, y: 0 });
 const endPos = ref({ x: 0, y: 0 });
@@ -34,6 +35,7 @@ function move(e) {
     e.deltaY < 0 ? setSlideType("prev") : setSlideType("next");
 }
 function setSlideType(type) {
+    console.log("setSlideType");
     let nowSlide = Number(sessionStorage.getItem("slideNum"));
 
     if (type === "prev" && nowSlide) {
@@ -43,7 +45,6 @@ function setSlideType(type) {
     }
     sessionStorage.setItem("slideNum", nowSlide);
     if (isPC.value || type === "prev") {
-        const contentTl = gsap.timeline();
         contentTl.to('.slideContent', { x: `${props.offsets[nowSlide]}`, duration: 0 })
     } else {
         mobileSlide();
@@ -53,9 +54,15 @@ function setSlideType(type) {
 }
 function mobileSlide() {
     let nowSlide = Number(sessionStorage.getItem("slideNum"));
-    const contentTl = gsap.timeline();
-    console.log(props.offsets[nowSlide], "mobileSlide");
-    if (isLeft.value || nowSlide === 9) {
+    // const contentTl = gsap.timeline();
+    console.log(nowSlide, "mobileSlide");
+    if(nowSlide === 9) {
+        contentTl.to(".slideContent", { x: props.offsets[nowSlide], opacity: 0.5, duration: 0 }, "<");
+        contentTl.to(".slideContent", { opacity: 1 , duration: 1})
+        return
+    }
+    console.log("in", isLeft.value);
+    if (isLeft.value) {
         contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: 1 });
     } else {
         const gap = Math.abs(props.offsets[1]);

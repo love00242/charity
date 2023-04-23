@@ -104,8 +104,8 @@ const getImageUrl = (type, num) => {
 
 onMounted(() => {
     console.log("query", route.query);
-    articleNum.value = route.query.article;
-    otherArticle.value = articleTitle.filter(item => item.num !== Number(articleNum.value));
+    articleNum.value = Number(route.query.article);
+    otherArticle.value = articleTitle.filter(item => item.num !== articleNum.value);
     window.addEventListener('scroll', handleScroll);
 });
 onBeforeUnmount(() => {
@@ -168,11 +168,11 @@ onBeforeUnmount(() => {
                         {{ item.title }}</p>
                     <section class="px-5" v-for="(val, k) in item.content" :key="'content' + k">
                         <p class="text-lg whitespace-pre-line mb-12 lg:text-xl">{{ val.text }}</p>
-                        <template v-if="val.photoNum.length > 0">
+                        <div v-if="val.photoNum.length > 0">
                             <img v-for="(num, n) in val.photoNum" :key="'contentImg' + n"
-                                :src="getImageUrl('pic', num)" class="mb-2 lg:w-full">
+                                :src="getImageUrl('pic', num)" :class="`mb-2 ${ articleNum === 3 && num !==1 && num !==3 ? 'lg:w-fit lg:m-auto' : 'lg:w-full' }`">
                             <small class="flex mb-10">{{ val.photoCaption }}</small>
-                        </template>
+                        </div>
                     </section>
                 </template>
             </template>

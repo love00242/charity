@@ -39,13 +39,14 @@ function setSilde(e) {
   if ((!activeSlide.value && e.deltaY < 0) || (activeSlide.value === 10 && e.deltaY > 0) || activeSlide.value === 9) return;
   e.deltaY > 0 ? slideAni("next") : slideAni("prev");
 }
-function slideAni(type, isBackConversation) {
+function slideAni(type) {
   console.log("slideAni");
   // if (gsap.isTweening(".slideContent")) return;
   type === "next" ? (activeSlide.value += 1) : (activeSlide.value -= 1);
   sessionStorage.setItem("slideNum", activeSlide.value);
-  isBackConversation && changeConversation();
-  gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
+  // isBackConversation && changeConversation();
+  gsap.to(".slideContent", { x: offsets.value[activeSlide.value], opacity: 0.5, duration: 0 }, "<");
+  gsap.to(".slideContent", { opacity: 1 , duration: 1})
 }
 function touchstart(e) {
   startPos.x = e.changedTouches[0].pageX;
@@ -84,7 +85,7 @@ function getSlider() {
   for (let i = 0; i < slideArr.value.length; i++) {
     offsets.value.push(-slideArr.value[i].offsetLeft);
   }
-  console.log("offsets", offsets.value);
+  console.log("offsets");
   sessionStorage.getItem("slideNum") > 0 && changeSlide();
 }
 function changeSlide() {
@@ -93,12 +94,8 @@ function changeSlide() {
   gsap.set('.slideContent', { x: offsets.value[activeSlide.value] });
 }
 function changeConversation() {
-  console.log("changeConversation", conversationDom.value, activeSlide.value);
+  console.log("changeConversation");
   activeSlide.value = Number(sessionStorage.getItem("slideNum"));
-  if (activeSlide.value === 9) {
-    gsap.to(".slideContent", { x: offsets.value[activeSlide.value], ease: "expo.out", duration: 1.5 });
-    return
-  }
   !activeSlide.value && indexContentDom.value.reverse();
 }
 onMounted(() => {
