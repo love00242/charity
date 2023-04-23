@@ -21,12 +21,12 @@ onMounted(() => {
   useMeta({
     meta: [
       {
-        name: 'keywords',
-        content: "測試"
+        name: 'og:title',
+        content: "測試測試"
       },
       {
-        property: "description",
-        content: "測試測試"
+        property: "og:image",
+        content: "public/meta_index.png"
       },
     ]
   })
@@ -34,5 +34,6 @@ onMounted(() => {
 </script>
 
 <template>
+  <metainfo></metainfo>
   <RouterView :key="routerKey" />
 </template>
