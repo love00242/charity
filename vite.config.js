@@ -3,8 +3,8 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 
 export default defineConfig({
-  // base: '/auroratrust/ ',
-  base: './',
+  base: '/auroratrust/ ',
+  // base: './',
   plugins: [vue()],
   server: {
     port: 8000,
