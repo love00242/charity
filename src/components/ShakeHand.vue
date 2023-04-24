@@ -59,7 +59,7 @@ function touchend() {
 </script>
 
 <template>
-    <div class="flex flex-col justify-around bg-[length:100%_100%] bg-[url('@/assets/bg/shakehand.png')] overflow-hidden lg:bg-[url('@/assets/bg/shakehand_pc.png')] w-full"
+    <div class="shakehand"
         @wheel.stop="slideAni" @touchstart="touchstart" @touchmove="touchmove" @touchend.stop="touchend">
         <div class="flex relative h-1/2 py-5 justify-center">
             <img class="lefthand absolute -left-[100%] h-[139px] md:h-[260px] lg:-left-[10%] lg:h-[342px] lg:w-1/2"
@@ -82,4 +82,8 @@ function touchend() {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.shakehand {
+    @apply flex flex-col justify-around bg-[length:100%_100%] bg-[url('@/assets/bg/shakehand.png')] overflow-hidden lg:bg-[url('@/assets/bg/shakehand_pc.png')] w-full;
+}
+</style>

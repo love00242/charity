@@ -61,7 +61,7 @@ defineExpose({
 </script>
 
 <template>
-    <div class="indexContent bg-[url('@/assets/bg/index.png')] bg-[length:100%_100%] flex justify-end flex-col lg:bg-[url('@/assets/bg/index_pc.png')]"
+    <div class="indexContent"
         @wheel.stop="moveWord" @touchstart.stop="touchstart" @touchmove="touchmove" @touchend.stop="touchend">
         <img v-if="!isPC" class="w-[65%] mx-auto md:w-[60%]" src="@/assets/main/title.png">
         <div v-else class="w-full flex absolute top-0 bottom-0 right-0 left-0 justify-center">
@@ -75,4 +75,8 @@ defineExpose({
     </div>
 </template>
 
-
+<style scoped>
+.indexContent {
+    @apply bg-[url('@/assets/bg/index.png')] bg-[length:100%_100%] flex justify-end flex-col lg:bg-[url('@/assets/bg/index_pc.png')]
+}
+</style>

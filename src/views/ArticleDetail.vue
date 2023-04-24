@@ -35,6 +35,7 @@ const gender = ref("");
 const ageRange = ref(null);
 const articleNum = ref(1);
 const otherArticle = ref([]);
+const isDone = ref(false);
 
 const changeState = (type, val) => {
     switch (type) {
@@ -72,7 +73,7 @@ async function sendData() {
     data.append("ageRange", ageRange.value)
 
     const result = await axios.post(api, data, config);
-    alert("謝謝你的作答");
+    isDone.value = true;
     console.log(result.status);
 }
 const goBack = () => {
@@ -214,6 +215,7 @@ onBeforeUnmount(() => {
                         <label :for="item.value">{{ item.text }}</label>
                     </li>
                 </ul>
+                <p v-if="isDone" class="text-center text-[15px]">謝謝你的作答</p>
                 <button class="btn w-[120px] py-3 mx-auto lg:w-[240px]" @click="sendData">確定</button>
             </section>
             <div class="flex justify-center mb-8 lg:flex-col lg:items-center lg:mt-8">
