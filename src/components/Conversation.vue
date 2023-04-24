@@ -31,6 +31,8 @@ const maxWidth = computed(() => {
 
 function move(e) {
     console.log("move");
+    let nowSlide = Number(sessionStorage.getItem("slideNum"));
+    if(!nowSlide) return;
     e.deltaY < 0 ? setSlideType("prev") : setSlideType("next");
 }
 function setSlideType(type) {
@@ -44,8 +46,9 @@ function setSlideType(type) {
     }
     sessionStorage.setItem("slideNum", nowSlide);
     if (isPC.value || type === "prev") {
+        console.log(nowSlide, "112");
         const contentTl = gsap.timeline();
-        contentTl.to('.slideContent', { x: `${props.offsets[nowSlide]}`, duration: 0 })
+        contentTl.set(".slideContent", { x: props.offsets[nowSlide],  duration: 1 });
     } else {
         mobileSlide();
     }
@@ -54,20 +57,16 @@ function setSlideType(type) {
 }
 function mobileSlide() {
     let nowSlide = Number(sessionStorage.getItem("slideNum"));
-    const contentTl = gsap.timeline();
     console.log(nowSlide, "mobileSlide");
-    if(nowSlide === 9) {
-        contentTl.to(".slideContent", { x: props.offsets[nowSlide], opacity: 0.5, duration: 0 }, "<");
-        contentTl.to(".slideContent", { opacity: 1 , duration: 1})
-        return
-    }
+    if(nowSlide === 9) return;
     console.log("in", isLeft.value);
+    const contentTl = gsap.timeline();
     if (isLeft.value) {
-        contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: 1 });
+        contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: .7 });
     } else {
         const gap = Math.abs(props.offsets[1]);
         contentTl.set(".slideContent", { x: props.offsets[nowSlide] - gap });
-        contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: 1 });
+        contentTl.to(".slideContent", { x: props.offsets[nowSlide], ease: "expo.out", duration: .7 });
     }
 
 }
@@ -99,7 +98,7 @@ function touchend() {
         <!-- 手機 -->
         <template v-if="!isPC">
             <div :class="['w-full h-full absolute z-0 ', isLeft ? 'bg-[#e4e4e4]/20' : 'bg-[#3f3f3f]/40']" />
-            <p :class="['font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line md:mb-[10%]', { 'text-white': !isLeft }]">{{ content.text }}</p>
+            <p :class="[`wordAni${content.idx} font-bold text-2xl text-center mb-[20%] mx-auto px-2.5 z-[1] whitespace-pre-line md:mb-[10%]`, { 'text-white': !isLeft }]">{{ content.text }}</p>
             <div class="flex w-[85%] z-[1]">
                 <img :src="isLeft ? leftMan : rightMan">
             </div>
@@ -110,7 +109,7 @@ function touchend() {
             <p :class="['bg-[#e4e4e4]/[0.92] w-1/2 h-full absolute', { 'z-[2]': !isLeft }]"></p>
             <p :class="['bg-black/60 w-1/2 h-full absolute right-0', { 'z-[2]': isLeft }]"></p>
             <!-- 文字 -->
-            <p :class="['font-bold text-[39px] text-center z-[1] whitespace-pre-line pr-[50%]', { 'text-white pl-[50%] whitespace-pre-wrap pr-[unset]': !isLeft }]">{{ content.text }}</p>
+            <p :class="[`wordAni${content.idx} font-bold text-[39px] text-center z-[1] whitespace-pre-line pr-[50%]`, { 'text-white pl-[50%] whitespace-pre-wrap pr-[unset]': !isLeft }]">{{ content.text }}</p>
             <div class="flex w-full z-[1] justify-between px-[1%]">
                 <img class="w-[32%]" :style="`max-width: ${maxWidth}%`" :src="leftMan">
                 <img class="w-[32%]" :style="`max-width: ${maxWidth}%`" :src="rightMan">

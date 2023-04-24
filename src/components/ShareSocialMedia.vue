@@ -47,10 +47,10 @@ const toggleShare = () => {
         <ul
             :class="['flex items-center pl-9 pr-2 py-1', !isPC ? 'border border-secondary rounded-full' : 'bg-[#434343] rounded-[3px] h-[35px]']">
             <li v-for="(item, i) in shareTypeList" :key="i" class="mx-2">
-                <ShareNetwork v-if="item.type === 'fb'" network="facebook" :url="'https://event.udn.com/auroratrust/'" :title="''">
+                <ShareNetwork v-if="item.type === 'fb'" network="facebook" :url="url" :title="''">
                     <img :src="item.svg">
                 </ShareNetwork>
-                <a v-else :href="`https://social-plugins.line.me/lineit/share?url=https://event.udn.com/auroratrust/`" target="_blank">
+                <a v-else :href="`https://social-plugins.line.me/lineit/share?url=${url}`" target="_blank">
                     <img :src="item.svg" class="line">
                 </a>
             </li>

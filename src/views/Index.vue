@@ -44,8 +44,7 @@ function slideAni(type) {
   // if (gsap.isTweening(".slideContent")) return;
   type === "next" ? (activeSlide.value += 1) : (activeSlide.value -= 1);
   sessionStorage.setItem("slideNum", activeSlide.value);
-  // isBackConversation && changeConversation();
-  gsap.to(".slideContent", { x: offsets.value[activeSlide.value], opacity: 0.5, duration: 0 }, "<");
+  gsap.to(".slideContent", { x: offsets.value[activeSlide.value], opacity: 1, duration: 0 }, "<");
   gsap.to(".slideContent", { opacity: 1 , duration: 1})
 }
 function touchstart(e) {
@@ -94,8 +93,13 @@ function changeSlide() {
   gsap.set('.slideContent', { x: offsets.value[activeSlide.value] });
 }
 function changeConversation() {
-  console.log("changeConversation");
+  console.log("changeConversation", conversationDom.value);
   activeSlide.value = Number(sessionStorage.getItem("slideNum"));
+  if(activeSlide.value === 9 ) {
+    console.log("off", offsets.value);
+    gsap.fromTo('.slideContent', { x: offsets.value[activeSlide.value], opacity: 0.5}, {opacity: 1, duration: 1})
+    return
+  }
   !activeSlide.value && indexContentDom.value.reverse();
 }
 onMounted(() => {
