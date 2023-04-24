@@ -1,6 +1,5 @@
 <script setup>
 import { RouterView, useRoute } from 'vue-router';
-import { useMeta } from 'vue-meta';
 import { debounce } from '@/utils/common';
 import { ref, provide, onMounted, computed } from 'vue';
 
@@ -22,6 +21,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <metainfo></metainfo>
   <RouterView :key="routerKey" />
 </template>
