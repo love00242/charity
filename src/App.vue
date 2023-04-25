@@ -15,12 +15,12 @@ const url = window.location.href;
 
 provide("isPC", isPC);
 
-watch(() => route.path, () => {
+watch(() => route?.query, () => {
   console.log("route.path", route.path, url, articleList[0].title);
 
   if (route.path.includes("articledetail")) {
     const articleNum = route?.query.article;
-    const title = articleList[articleNum - 1].title;
+    const title = articleList[articleNum - 1].title + ' ' + articleList[articleNum - 1].subTitle;
     document
       .querySelector('meta[property="og:url"]')
       .setAttribute("content", `https://charity-love00242.vercel.app/#/articledetail?article=${articleNum}`);

@@ -1,5 +1,6 @@
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import fbSvg from '@/assets/icon/fb.svg';
 import lineSvg from '@/assets/icon/line.svg';
 import share_pc from '@/assets/icon/share_pc.svg';
@@ -12,14 +13,18 @@ const props = defineProps({
         default: false,
     }
 });
+const route = useRoute();
 
 const shareTypeList = [
     { type: "fb", svg: fbSvg },
     { type: "line", svg: lineSvg },
 ];
 const isPC = inject('isPC');
-const url = window.location.href;
+// const url = window.location.href;
 const isOpenShare = ref(false);
+
+const url = computed(() => route.path.includes("articledetail") ? `https://charity-love00242.vercel.app/#/articledetail?article=${route?.query.article}` : 'https://charity-love00242.vercel.app/')
+
 const toggleShare = () => {
     console.log("toggleShare");
     isOpenShare.value = !isOpenShare.value;
@@ -39,7 +44,9 @@ const toggleShare = () => {
 
     <div
         :class="['share relative origin-left', isOpenShare ? 'scale-x-100  opacity-100 w-auto flex items-center' : 'scale-x-0 h-0 opacity-0 hidden']">
-        <div v-if="isPC" class="w-[37px] h-[37px] absolute -left-1 flex items-center justify-center bg-[#434343] rounded-[3px] border border-secondary cursor-pointer" @click="toggleShare">
+        <div v-if="isPC"
+            class="w-[37px] h-[37px] absolute -left-1 flex items-center justify-center bg-[#434343] rounded-[3px] border border-secondary cursor-pointer"
+            @click="toggleShare">
             <img :src="close_pc">
         </div>
         <img v-else :src="close" class="absolute cursor-pointer h-auto" @click="toggleShare">
