@@ -2,6 +2,7 @@
 import { RouterView, useRoute } from 'vue-router';
 import { debounce } from '@/utils/common';
 import { ref, provide, onMounted, computed, watch } from 'vue';
+import { articleList } from '@/utils/config/articleConfig';
 
 const route = useRoute();
 
@@ -10,26 +11,37 @@ const routerKey = computed(() => {
 })
 
 const isPC = ref(window.innerWidth >= 1024);
+const url = window.location.href;
 
 provide("isPC", isPC);
 
 watch(() => route.path, () => {
-  console.log("route.path", route.path, route.query.article);
+  console.log("route.path", route.path, url, articleList[0].title);
 
+  document
+    .querySelector('meta[property="og:url"]')
+    .setAttribute("content", url);
   if (route.path.includes("articledetail")) {
-    document
-      .querySelector('meta[property="og:url"]')
-      .setAttribute("content", `https://event.udn.com/auroratrust/articledetail?article=${route?.query.article}`);
+    // document
+    //   .querySelector('meta[property="og:url"]')
+    //   .setAttribute("content", url);
+    const articleNum = route?.query.article;
     document
       .querySelector('meta[property="og:image"]')
-      .setAttribute("content", `https://event.udn.com/auroratrust/meta_article${route?.query.article}.png`);
+      .setAttribute("content", `https://charity-love00242.vercel.app/meta_article${articleNum}.png`);
+    document
+      .querySelector('meta[property="og:title"]')
+      .setAttribute("content", articleList[articleNum- 1]);
   } else {
-    document
-      .querySelector('meta[property="og:url"]')
-      .setAttribute("content", "https://event.udn.com/auroratrust/");
+    // document
+    //   .querySelector('meta[property="og:url"]')
+    //   .setAttribute("content", "https://event.udn.com/auroratrust/");
     document
       .querySelector('meta[property="og:image"]')
-      .setAttribute("content", "https://event.udn.com/auroratrust/meta_index.png");
+      .setAttribute("content", "https://charity-love00242.vercel.app/meta_index.png");
+    document
+      .querySelector('meta[property="og:title"]')
+      .setAttribute("content", "「平行公益　縫合大眾與助人者的認知落差」");
   }
 })
 

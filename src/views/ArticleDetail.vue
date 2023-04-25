@@ -59,7 +59,7 @@ const changeState = (type, val) => {
 }
 async function sendData() {
     console.log("sendData");
-    if (member === "" || gender === "" || ageRange === null) {
+    if (topAns.value === null || bottomAns.value === null || member === "" || gender === "" || ageRange === null) {
         alert("還有題目尚未作答");
         return
     }
